@@ -11,7 +11,8 @@ export async function createShelf(
 ): Promise<Shelf> {
   const shelves =
     (await adapter.get<Shelf[]>(
-      storageKeys.shelves()
+      storageKeys.shelves(),
+      { type: 'user', userId }
     )) ?? [];
 
   const shelf: Shelf = {
@@ -24,11 +25,10 @@ export async function createShelf(
     settings: {
       layout: 'spatial', // 👈 DEFAULT
       theme: 'bw',
-      showCovers: true,
+      //showCovers: true, //????????
     },
 
     books: 0,
-
     createdAt: Date.now(),
   };
 
@@ -36,7 +36,8 @@ export async function createShelf(
 
   await adapter.set(
     storageKeys.shelves(),
-    shelves
+    shelves,
+    { type: 'user', userId } 
   );
 
   // ✅ precise history log

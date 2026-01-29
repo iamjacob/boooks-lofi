@@ -15,6 +15,8 @@ import { storageKeys } from '@/storage/keys';
 import { applyTheme } from '@/ui/theme/applyTheme';
 import { User } from '@/core/models/user';
 import { UserThemePanel } from '@/ui/panels/UserThemePanel'
+import { AddBookPanel } from '@/ui/panels/AddBookPanel'
+import { LibraryPanel } from '@/ui/panels/LibraryPanel'
 
 
 export default function ClientApp() {
@@ -141,6 +143,16 @@ useEffect(() => {
 <div className="panel">
 
       <HistoryPanel userId={activeUserId} />
+</div>
+
+<div className="panels">
+  <AddBookPanel userId={activeUserId} />
+
+</div>
+
+<div className="panels">
+<LibraryPanel userId={activeUserId} />
+
 </div>
     </div>
   );

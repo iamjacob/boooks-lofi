@@ -26,6 +26,8 @@ export type HistoryEventType =
   | 'SHELF_UPDATED'
   | 'BOOK_ADDED_TO_SHELF'
   | 'BOOK_REMOVED_FROM_SHELF'
+  
+  | 'shelf_instance.created'
 
   // collections
   | 'COLLECTION_CREATED'

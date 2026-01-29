@@ -19,6 +19,7 @@ export interface Shelf {
   settings?: {
     layout: 'grid' | 'row' | 'stack' | 'spatial';
     theme?: 'light' | 'dark' | 'bw';
+    showCovers?: boolean;
   };
   
   books?: number; // 👈 derived count, NOT required

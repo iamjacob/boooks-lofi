@@ -1,15 +1,19 @@
-// storage/keys.ts
-
 export const storageKeys = {
-  // global (device-wide)
+  // ─────────────────────────────
+  // GLOBAL (device-wide)
+  // ─────────────────────────────
   device: 'device',
   users: 'users',
   activeUserId: 'activeUserId',
 
-  // per-user collections (scoped via StorageScope)
+  /** Global canonical books (shared conceptually) */
+  books: 'books',
+
+  // ─────────────────────────────
+  // PER-USER (scoped via StorageScope)
+  // ─────────────────────────────
   sessions: () => 'sessions',
   shelves: () => 'shelves',
-  books: () => 'books',
   history: () => 'history',
   clips: () => 'clips',
   tags: () => 'tags',
@@ -18,9 +22,15 @@ export const storageKeys = {
   tgd: () => 'tgd',
   collections: () => 'collections',
 
+  /** User ↔ Book relationship (Library) */
+  userBooks: () => 'userBooks',
 
+  /** Shelf projections (expressions) */
+  shelfInstances: () => 'shelfInstances',
 
-
-  // single entities
-  book: (bookId: string) => `books:${bookId}`,
+  // ─────────────────────────────
+  // OPTIONAL: single-entity helpers
+  // (use later if you want)
+  // ─────────────────────────────
+  bookById: (bookId: string) => `book:${bookId}`,
 };
