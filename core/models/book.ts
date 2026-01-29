@@ -1,5 +1,40 @@
 import { ID } from '@/core/ids/id';
 
+export type BookState =
+  | 'draft'
+  | 'pending'
+  | 'published'
+  | 'archived';
+
+export interface Book {
+  id: ID;
+
+  /** Lineage */
+  parentId?: ID; // sibling / child / merge logic
+
+  /** Metadata */
+  title?: string;
+  description?: string;
+  language?: string;
+  publishedYear?: number;
+
+  /** Classification */
+  categoryIds?: ID[];
+  tagIds?: ID[];
+
+  /** Assets */
+  assetIds?: ID[];
+
+  /** Ownership */
+  createdBy: ID;
+
+  /** Lifecycle */
+  state: BookState;
+  createdAt: number;
+  updatedAt?: number;
+}
+
+
 /**
  * Book = the abstract work / idea.
  *
@@ -10,33 +45,3 @@ import { ID } from '@/core/ids/id';
  * - A Book may exist locally as a draft
  * - Lineage is expressed via parentId
  */
-export type BookState =
-  | 'draft'
-  | 'published'
-  | 'archived';
-
-export interface Book {
-  id: ID;
-
-  /** Lineage (editions, translations, OCR variants) */
-  parentId?: ID;
-
-  /** Canonical metadata (may be incomplete in drafts) */
-  title?: string;
-  description?: string;
-  language?: string;
-  publishedYear?: number;
-
-  /** Global meaning */
-  authorIds?: ID[];
-  categoryIds?: ID[];
-
-  /** Lifecycle */
-  state: BookState;
-
-  /** Provenance (who introduced this idea) */
-  createdByIdentityId?: ID;
-
-  createdAt: number;
-  updatedAt?: number;
-}

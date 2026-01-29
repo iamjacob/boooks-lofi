@@ -5,38 +5,23 @@ export type ShelfVisibility =
   | 'unlisted'
   | 'public';
 
-export type ShelfLayout =
-  | 'list'
-  | 'grid'
-  | 'row'
-  | 'stack'
-  | 'spatial'; // 👈 3D default
-
-export interface ShelfSettings {
-  layout: ShelfLayout;
-  theme?: 'light' | 'dark' | 'bw';
-  showCovers?: boolean;
-}
-
 export interface Shelf {
   id: ID;
 
-  /** Ownership */
   ownerId: ID;
 
-  /** Identity */
   title: string;
-  slug?: string; // future unique URL
+  slug?: string;
 
-  /** Behavior */
   visibility: ShelfVisibility;
 
-  /** Optional settings (defaults applied at render time) */
-  settings?: ShelfSettings;
-
-  /** Stats (derived, not authoritative) */
+  /** Visual / world settings */
+  settings?: {
+    layout: 'grid' | 'row' | 'stack' | 'spatial';
+    theme?: 'light' | 'dark' | 'bw';
+  };
+  
   books?: number; // 👈 derived count, NOT required
-
   createdAt: number;
   updatedAt?: number;
 }
