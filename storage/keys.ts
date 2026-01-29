@@ -16,6 +16,8 @@ export const storageKeys = {
   assets: () => 'assets',
   categories: () => 'categories',
   tgd: () => 'tgd',
+  collections: () => 'collections',
+
 
 
 

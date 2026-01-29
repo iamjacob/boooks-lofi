@@ -1,6 +1,15 @@
-// core/models/book.ts
 import { ID } from '@/core/ids/id';
 
+/**
+ * Book = the abstract work / idea.
+ *
+ * INVARIANTS:
+ * - A Book does NOT belong to a shelf
+ * - A Book does NOT have tags (personal meaning)
+ * - A Book does NOT have ownership
+ * - A Book may exist locally as a draft
+ * - Lineage is expressed via parentId
+ */
 export type BookState =
   | 'draft'
   | 'published'
@@ -9,30 +18,25 @@ export type BookState =
 export interface Book {
   id: ID;
 
-  /** Draft lineage */
+  /** Lineage (editions, translations, OCR variants) */
   parentId?: ID;
 
-  /** Core metadata */
+  /** Canonical metadata (may be incomplete in drafts) */
   title?: string;
   description?: string;
   language?: string;
   publishedYear?: number;
 
-  /** Relations */
+  /** Global meaning */
   authorIds?: ID[];
-  shelfId?: ID;
-
-  /** Assets (covers, pdfs, scans) */
-  assetIds?: ID[];
-
-  /** Tags (reference IDs, not strings) */
-  tagIds?: ID[];
-
-  /** Ownership */
-  createdBy: ID;
+  categoryIds?: ID[];
 
   /** Lifecycle */
   state: BookState;
+
+  /** Provenance (who introduced this idea) */
+  createdByIdentityId?: ID;
+
   createdAt: number;
   updatedAt?: number;
 }

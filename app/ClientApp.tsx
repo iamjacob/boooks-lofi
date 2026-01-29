@@ -12,6 +12,10 @@ import { ClipsPanel } from '@/ui/panels/ClipsPanel';
 import { AddQuotePanel } from '@/ui/panels/AddQuotePanel';
 import { UserSwitcher } from '@/ui/panels/UserSwitcher';
 import { storageKeys } from '@/storage/keys';
+import { applyTheme } from '@/ui/theme/applyTheme';
+import { User } from '@/core/models/user';
+import { UserThemePanel } from '@/ui/panels/UserThemePanel'
+
 
 export default function ClientApp() {
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
@@ -20,6 +24,23 @@ export default function ClientApp() {
   function handleSwitchUser(userId: string) {
     setActiveUserId(userId);
   }
+
+useEffect(() => {
+  if (!activeUserId || !adapterRef.current) return;
+
+  async function applyUserTheme() {
+    const users =
+      (await adapterRef.current!.get<User[]>(
+        storageKeys.users
+      )) ?? [];
+
+    const user = users.find(u => u.id === activeUserId);
+    applyTheme(user?.theme);
+  }
+
+  applyUserTheme();
+}, [activeUserId]);
+
 
   // 🔹 BOOTSTRAP + RESTORE ACTIVE USER
   useEffect(() => {
@@ -68,22 +89,59 @@ export default function ClientApp() {
     return <div>Booting…</div>;
   }
 
+
+
+
   return (
-    <div style={{ padding: 24 }}>
+    <div
+  style={{
+    padding: 24,
+    background: 'var(--bg)',
+    color: 'var(--text)',
+    minHeight: '100vh',
+  }}
+>
+
+      <div className="panel">
       <BootInfo />
+
+      </div>
+      <div className="panel">
+
       <OnlineStatus />
+      </div>
+      <div className="panel">
+
+      <UserThemePanel userId={activeUserId} />
+      </div>
+
+<div className="panel">
 
       <UserSwitcher
         activeUserId={activeUserId}
         onSwitch={handleSwitchUser}
-      />
+        />
+        </div>
+<div className="panel">
 
       <UserCreatePanel />
+</div>
+<div className="panel">
 
       <ShelvesPanel userId={activeUserId} />
+</div>
+<div className="panel">
+
       <ClipsPanel userId={activeUserId} />
+</div>
+<div className="panel">
+
       <AddQuotePanel userId={activeUserId} />
+</div>
+<div className="panel">
+
       <HistoryPanel userId={activeUserId} />
+</div>
     </div>
   );
 }

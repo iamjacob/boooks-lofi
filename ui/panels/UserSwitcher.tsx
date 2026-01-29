@@ -6,6 +6,14 @@ import { storageKeys } from '@/storage/keys';
 import { User } from '@/core/models/user';
 import { updateUser } from '@/core/user/updateUser';
 import { setUserPin, unlockUser } from '@/core/user/lockUser';
+import { logEvent } from '@/core/history/logEvent';
+
+import {
+  getSession,
+  createSession,
+  clearSession,
+} from '@/core/session/sessionStore';
+
 
 export function UserSwitcher({
   activeUserId,
@@ -18,8 +26,8 @@ export function UserSwitcher({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [nameDraft, setNameDraft] = useState('');
 
-  // ✅ single adapter instance
   const adapterRef = useRef<IndexedDBAdapter | null>(null);
+  const deviceId = 'device_local'; // TEMP, already planned
 
   async function loadUsers() {
     if (!adapterRef.current) {
@@ -53,7 +61,18 @@ export function UserSwitcher({
   async function handleSwitch(user: User) {
     if (!adapterRef.current) return;
 
-    // 🔒 user is locked
+    // ✅ already unlocked session?
+    const session = await getSession(
+      adapterRef.current,
+      user.id
+    );
+
+    if (session) {
+      onSwitch(user.id);
+      return;
+    }
+
+    // 🔒 user has PIN → require unlock
     if (user.pinHash) {
       const pin = prompt('Enter PIN');
       if (!pin) return;
@@ -68,7 +87,23 @@ export function UserSwitcher({
         alert('Wrong PIN');
         return;
       }
+
+      await createSession(adapterRef.current, {
+        userId: user.id,
+        deviceId,
+        unlockedAt: Date.now(),
+      });
+
+      onSwitch(user.id);
+      return;
     }
+
+    // ✅ no PIN → auto session
+    await createSession(adapterRef.current, {
+      userId: user.id,
+      deviceId,
+      unlockedAt: Date.now(),
+    });
 
     onSwitch(user.id);
   }
@@ -80,8 +115,25 @@ export function UserSwitcher({
     if (!pin) return;
 
     await setUserPin(adapterRef.current, userId, pin);
+    await clearSession(adapterRef.current, userId); // force re-unlock
     loadUsers();
   }
+
+  async function handleLogout(userId: string) {
+  if (!adapterRef.current) return;
+
+  await clearSession(adapterRef.current, userId);
+
+  await logEvent(
+    adapterRef.current,
+    userId,
+    'user.logged_out'
+  );
+
+  // optional: if logging out active user, do nothing
+  // next switch will require PIN again
+}
+
 
   return (
     <div style={{ marginBottom: 16 }}>
@@ -139,6 +191,13 @@ export function UserSwitcher({
                   >
                     🔐 Set PIN
                   </button>
+                  <button
+  onClick={() => handleLogout(user.id)}
+  style={{ marginLeft: 8 }}
+>
+  🚪 Log out
+</button>
+
                 </>
               )}
             </li>

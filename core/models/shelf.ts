@@ -30,10 +30,12 @@ export interface Shelf {
 
   /** Behavior */
   visibility: ShelfVisibility;
-  settings: ShelfSettings;
+
+  /** Optional settings (defaults applied at render time) */
+  settings?: ShelfSettings;
 
   /** Stats (derived, not authoritative) */
-  books: number; // 👈 number of books, not max
+  books?: number; // 👈 derived count, NOT required
 
   createdAt: number;
   updatedAt?: number;

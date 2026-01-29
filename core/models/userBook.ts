@@ -1,34 +1,50 @@
-// core/models/userBook.ts
 import { ID } from '@/core/ids/id';
 
-export interface Vec3 {
-  x: number;
-  y: number;
-  z: number;
-}
-
+/**
+ * UserBook = a user's relationship to a Book.
+ *
+ * INVARIANTS:
+ * - Every UserBook has a base physical placement
+ * - Shelves are ownership/organization, not position
+ * - Collections NEVER own books, only influence layout
+ * - Visual movement does NOT mutate data unless confirmed
+ */
 export interface UserBook {
   id: ID;
 
+  /** Identity */
   userId: ID;
   bookId: ID;
 
-  /** Shelf relations */
-  shelfIds?: ID[];
+  /** Organization */
+  shelfIds: ID[]; // always at least the default shelf
 
-  /** Semantics */
+  /** Meaning (personal) */
   tagIds?: ID[];
 
   /** Reading state */
   readingStatus?: 'unread' | 'reading' | 'finished';
 
-  /** Personal notes */
-  notes?: string;
+  /** BASE physical placement (home position) */
+  position: [number, number, number];
+  rotation: [number, number, number];
 
-  /** 3D placement (per user, per book) */
-  position?: Vec3;
-  rotation?: Vec3;
-  scale?: Vec3;
+  /**
+   * Optional physical / IRL placement
+   * (room, wall, real shelf, etc.)
+   */
+  physicalPlacement?: {
+    roomId?: ID;
+    label?: string;
+  };
+
+  /** Ownership / rights (future-safe) */
+  ownership?: {
+    type: 'local' | 'license' | 'nft' | 'donation';
+    ownerIdentityId?: ID;
+    chain?: string;
+    tokenId?: string;
+  };
 
   createdAt: number;
   updatedAt?: number;

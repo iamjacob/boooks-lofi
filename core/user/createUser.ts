@@ -1,60 +1,76 @@
-// core/user/createUser.ts
 import { createId } from '@/core/ids/id';
 import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
 import { User } from '@/core/models/user';
+import { Shelf } from '@/core/models/shelf';
 import { logEvent } from '@/core/history/logEvent';
 
+/**
+ * Create a new user AND a default shelf.
+ * This guarantees every user has a valid home shelf.
+ */
 export async function createUser(
   adapter: StorageAdapter,
-  input: {
-    mode: 'private' | 'social';
+  input?: {
     displayName?: string;
-    language?: string;
+    mode?: 'private' | 'social';
   }
-) {
+): Promise<User> {
   const users =
     (await adapter.get<User[]>(
-      storageKeys.users,
-      { type: 'global' }
+      storageKeys.users
     )) ?? [];
 
-  const user: User = {
-    id: `user_${createId()}`,
-    mode: input.mode,
-    displayName: input.displayName,
-    uiLanguage: input.language,
-    createdAt: Date.now(),
+  const userId = `user_${createId()}`;
+  const shelfId = `shelf_${createId()}`;
+
+  const now = Date.now();
+
+  const defaultShelf: Shelf = {
+    id: shelfId,
+    ownerId: userId,
+    title: 'My Books',
+    visibility: 'private',
+    createdAt: now,
   };
 
+  const user: User = {
+    id: userId,
+    displayName: input?.displayName,
+    mode: input?.mode ?? 'private',
+    defaultShelfId: shelfId,
+    createdAt: now,
+  };
+
+  // 1️⃣ Save user
   users.push(user);
+  await adapter.set(storageKeys.users, users);
 
-  await adapter.set(storageKeys.users, users, { type: 'global' });
+  // 2️⃣ Save default shelf
+  const shelves =
+    (await adapter.get<Shelf[]>(
+      storageKeys.shelves(),
+      { type: 'user', userId }
+    )) ?? [];
 
-  // init per-user collections
-  await adapter.set(storageKeys.shelves(), [], {
-    type: 'user',
-    userId: user.id,
+  shelves.push(defaultShelf);
+
+  await adapter.set(
+    storageKeys.shelves(),
+    shelves,
+    { type: 'user', userId }
+  );
+
+  // 3️⃣ Log events
+  await logEvent(adapter, userId, 'user.created', {
+    userId,
   });
 
-  await adapter.set(storageKeys.books(), [], {
-    type: 'user',
-    userId: user.id,
+  await logEvent(adapter, userId, 'shelf.created', {
+    shelfId,
+    title: defaultShelf.title,
+    isDefault: true,
   });
-
-  await adapter.set(storageKeys.clips(), [], {
-    type: 'user',
-    userId: user.id,
-  });
-
-  await logEvent(
-  adapter,
-  user.id,
-  'device_local', // TEMP: until device is injected properly
-  'user.created',
-  { mode: user.mode }
-);
-
 
   return user;
 }

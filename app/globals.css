@@ -1,9 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --text: #111111;
+  --panel: #f2f2f2;
+  --border: #dddddd;
 }
+
+/* Black & White (Scandi default) */
+:root[data-theme='bw'] {
+  --bg: #ffffff;
+  --text: #000000;
+  --panel: #f6f6f6;
+  --border: #000000;
+}
+
+/* Light */
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --text: #222222;
+  --panel: #f3f3f3;
+  --border: #cccccc;
+}
+
+/* Dark */
+:root[data-theme='dark'] {
+  --bg: #0e0e0e;
+  --text: #eeeeee;
+  --panel: #1a1a1a;
+  --border: #333333;
+}
+
+/* Apply globally */
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
 
 @theme inline {
   --color-background: var(--background);

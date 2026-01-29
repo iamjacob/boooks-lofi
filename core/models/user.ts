@@ -24,6 +24,8 @@ export interface User {
   /** Reading language(s) */
   readingLanguages?: string[]; // ['en', 'da']
 
+  defaultShelfId: ID;
+  
   createdAt: number;
   updatedAt?: number;
 }
