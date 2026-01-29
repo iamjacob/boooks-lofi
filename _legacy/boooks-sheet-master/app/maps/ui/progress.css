@@ -1,0 +1,11 @@
+.progress-quarter {
+  stroke-dasharray: 0 var(--circ);
+  stroke-dashoffset: var(--offset);
+  animation: grow-quarter 1.2s ease-out forwards;
+}
+
+@keyframes grow-quarter {
+  to {
+    stroke-dasharray: var(--draw) var(--circ);
+  }
+}

@@ -1,0 +1,283 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+/* *{
+  outline:red 1px solid;
+  } */  
+  
+
+body {
+  background: var(--background);
+  /* background:url('../public/bg.png'); */
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  inset: 0;
+}
+
+header {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* styles for AddBookFlow input fields */
+.flow-step-container fieldset{
+	border-radius:8px;
+	display:flex;
+	font-family:Sans-serif;
+  border: 2px solid red;
+  border-radius: 8px;
+  margin:8px 0;
+}
+
+legend{
+	font-size:.8rem;
+	font-weight:500;
+  margin-left:8px;
+}
+
+.flow-step-container input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  flex: 1;
+  padding: 8px;
+}
+
+/* author in add form.. */
+.author-container {
+  border: 2px solid #ff3b30;
+  border-radius: 20px;
+  padding: 10px 15px;
+  background: #fff;
+}
+
+.author-chip-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.author-chip {
+  background: #f2f2f7;
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: popIn 0.2s ease-out;
+}
+
+.author-chip button {
+  background: #ddd;
+  border: none;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.author-container input {
+  border: none !important; /* Remove individual borders */
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+  font-size: 18px;
+  padding: 8px 0;
+}
+
+.add-author-btn {
+  font-size: 12px;
+  color: #ff3b30;
+  font-weight: 700;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+.fade-in-slide {
+  animation: gentleSlide 0.3s ease-out forwards;
+}
+
+@keyframes gentleSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fieldsetEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin-top: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 200px; /* Large enough to fit the field */
+    margin-top: 1rem;
+  }
+}
+
+.animate-subtitle {
+  animation: fieldsetEntrance 0.25s ease-out forwards;
+  overflow: hidden;
+}
+
+/* Shake animation for duplicates */
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/*
+  MENU SIDE
+*/
+
+ul li a, ul li{
+  display: flex;
+  gap:8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/*Scrollers*/
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.25) transparent;
+}
+
+/* Chrome / Edge / Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.25);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255,255,255,0.45);
+}
+
+.boooks-logo {
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.boooks-logo:hover {
+  transform: scale(1.04);
+  filter:
+    drop-shadow(0 2px 6px rgba(0,0,0,.45))
+    drop-shadow(0 0 6px rgba(217,27,36,.45));
+}
+
+
+
+/**progress ring in maps*/
+.progress-ring {
+  stroke-dashoffset: var(--circumference);
+}
+
+[data-holding="true"] .progress-ring {
+  animation: ring-fill 5s linear forwards;
+}
+
+@keyframes ring-fill {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+/*maps*/
+.maplibregl-ctrl-bottom-right{
+  display: none;
+}
+
+
+/* Falling letters */
+.fall-letter {
+  display: inline-block;
+  transform: translateY(-1.6em);
+  animation-name: fallIn;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both; /* 👈 IMPORTANT */
+  animation-delay: var(--delay);
+}
+
+@keyframes fallIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.6em);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0.05em);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+

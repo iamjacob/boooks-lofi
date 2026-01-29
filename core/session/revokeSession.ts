@@ -1,0 +1,27 @@
+// core/session/revokeSession.ts
+import { StorageAdapter } from '@/storage/adapter';
+import { storageKeys } from '@/storage/keys';
+import { Session } from '@/core/models/session';
+
+export async function revokeSession(
+  adapter: StorageAdapter,
+  sessionId: string
+) {
+  const sessions =
+    (await adapter.get<Session[]>(
+      storageKeys.sessions(),
+      { type: 'global' }
+    )) ?? [];
+
+  const updated = sessions.map(s =>
+    s.id === sessionId
+      ? { ...s, status: 'revoked', revokedAt: Date.now() }
+      : s
+  );
+
+  await adapter.set(
+    storageKeys.sessions(),
+    updated,
+    { type: 'global' }
+  );
+}

@@ -1,0 +1,61 @@
+{
+  "id": "/boooks",
+  "name": "Boooks – Your Living Bookshelf",
+  "short_name": "Boooks",
+  "description": "A beautiful, offline-first reading and bookshelf app. Scan, collect, explore, and grow with books.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#D91B24",
+  "theme_color": "#D91B24",
+  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["books", "education", "productivity", "entertainment"],
+  "prefer_related_applications": false,
+
+  "icons": [
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "My Shelf",
+      "short_name": "Shelf",
+      "description": "Open your personal bookshelf",
+      "url": "/",
+      "icons": [{ "src": "/icons/shortcut-shelf.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Scan Book",
+      "short_name": "Scan",
+      "description": "Scan a physical book",
+      "url": "/scan",
+      "icons": [{ "src": "/icons/shortcut-scan.png", "sizes": "192x192" }]
+    }
+  ]
+}
