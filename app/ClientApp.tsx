@@ -17,6 +17,7 @@ import { User } from '@/core/models/user';
 import { UserThemePanel } from '@/ui/panels/UserThemePanel'
 import { AddBookPanel } from '@/ui/panels/AddBookPanel'
 import { LibraryPanel } from '@/ui/panels/LibraryPanel'
+import ShelfView from '@/ui/panels/ShelfViewPanel';
 
 
 export default function ClientApp() {
@@ -27,21 +28,21 @@ export default function ClientApp() {
     setActiveUserId(userId);
   }
 
-useEffect(() => {
-  if (!activeUserId || !adapterRef.current) return;
+  useEffect(() => {
+    if (!activeUserId || !adapterRef.current) return;
 
-  async function applyUserTheme() {
-    const users =
-      (await adapterRef.current!.get<User[]>(
-        storageKeys.users
-      )) ?? [];
+    async function applyUserTheme() {
+      const users =
+        (await adapterRef.current!.get<User[]>(
+          storageKeys.users
+        )) ?? [];
 
-    const user = users.find(u => u.id === activeUserId);
-    applyTheme(user?.theme);
-  }
+      const user = users.find(u => u.id === activeUserId);
+      applyTheme(user?.theme);
+    }
 
-  applyUserTheme();
-}, [activeUserId]);
+    applyUserTheme();
+  }, [activeUserId]);
 
 
   // 🔹 BOOTSTRAP + RESTORE ACTIVE USER
@@ -91,69 +92,57 @@ useEffect(() => {
     return <div>Booting…</div>;
   }
 
-
-
-
   return (
     <div
-  style={{
-    padding: 24,
-    background: 'var(--bg)',
-    color: 'var(--text)',
-    minHeight: '100vh',
-  }}
->
-
+      style={{
+        padding: 24,
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        minHeight: '100vh',
+      }}
+    >
       <div className="panel">
-      <BootInfo />
-
+        <BootInfo />
       </div>
       <div className="panel">
-
-      <OnlineStatus />
+        <OnlineStatus />
       </div>
       <div className="panel">
-
-      <UserThemePanel userId={activeUserId} />
+        <UserThemePanel userId={activeUserId} />
       </div>
 
-<div className="panel">
-
-      <UserSwitcher
-        activeUserId={activeUserId}
-        onSwitch={handleSwitchUser}
+      <div className="panel">
+        <UserSwitcher
+          activeUserId={activeUserId}
+          onSwitch={handleSwitchUser}
         />
-        </div>
-<div className="panel">
+      </div>
+      <div className="panel">
+        <UserCreatePanel />
+      </div>
+      <div className="panel">
+        <ShelvesPanel userId={activeUserId} />
+      </div>
+      <div className="panel">
+        <ClipsPanel userId={activeUserId} />
+      </div>
+      <div className="panel">
+        <AddQuotePanel userId={activeUserId} />
+      </div>
+      <div className="panel">
+        <HistoryPanel userId={activeUserId} />
+      </div>
 
-      <UserCreatePanel />
-</div>
-<div className="panel">
+      <div className="panels">
+        <AddBookPanel userId={activeUserId} />
+      </div>
+      <div className="panels">
+        <LibraryPanel userId={activeUserId} />
+      </div>
+      <div className="panels">
+        <ShelfView />
+      </div>
 
-      <ShelvesPanel userId={activeUserId} />
-</div>
-<div className="panel">
-
-      <ClipsPanel userId={activeUserId} />
-</div>
-<div className="panel">
-
-      <AddQuotePanel userId={activeUserId} />
-</div>
-<div className="panel">
-
-      <HistoryPanel userId={activeUserId} />
-</div>
-
-<div className="panels">
-  <AddBookPanel userId={activeUserId} />
-
-</div>
-
-<div className="panels">
-<LibraryPanel userId={activeUserId} />
-
-</div>
     </div>
   );
 }

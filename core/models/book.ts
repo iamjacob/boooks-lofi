@@ -14,6 +14,9 @@ export interface Book {
 
   /** Metadata */
   title?: string;
+  subtitle?: string;
+
+  authorID?: ID;
   description?: string;
   language?: string;
   publishedYear?: number;
