@@ -1,5 +1,18 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+hoooks
+
+language
+screen
+battery saver 
+fingerprint
+battery
+net
+
+MUCH more!
+
+
+
 ## Getting Started
 
 First, run the development server:
