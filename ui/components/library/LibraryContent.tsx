@@ -4,7 +4,7 @@ import { UserBook } from "@/core/models/userBook";
 
 type Props = {
   books: BookListItem[];
-  userBooks: UserBook[];
+  // userBooks: UserBook[];
   onSelectBook: (id: string) => void;
   onSetReadingStatus: (
     bookId: string,
@@ -14,7 +14,7 @@ type Props = {
 
 export function LibraryContent({
   books,
-  userBooks,
+  // userBooks,
   onSelectBook,
   onSetReadingStatus,
 }: Props) {

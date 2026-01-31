@@ -20,6 +20,8 @@ import { collectionExists } from "@/core/collections/collectionsExists";
 import { ID } from "@/core/ids/id";
 import { ShelfSwitcher } from "@/ui/components/library/ShelfSwitcher";
 import { CollectionSwitcher } from "@/ui/components/library/CollectionSwitcher";
+import { LibraryModeSwitcher } from "@/ui/components/library/LibraryModeSwitcher";
+import { SortSwitcher } from "@/ui/components/library/SortSwitcher";
 
 /* ---------------- TYPES ---------------- */
 
@@ -37,6 +39,9 @@ type ViewState =
   | "collection-not-found"
   | "ready";
 
+
+type SortMode = "title" | "status" | "added";
+
 /* ---------------- COMPONENT ---------------- */
 
 export function LibraryShell({
@@ -46,7 +51,7 @@ export function LibraryShell({
 }: LibraryShellProps) {
   const [viewState, setViewState] = useState<ViewState>("loading-user");
 
-  const [books, setBooks] = useState<BookListItem[]>([]);
+  const [allBooks, setAllBooks] = useState<BookListItem[]>([]);
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [editing, setEditing] = useState<BookListItem | null>(null);
 
@@ -57,15 +62,18 @@ export function LibraryShell({
   const [collections, setCollections] = useState<
     { id: string; title: string }[]
   >([]);
+const [sortMode, setSortMode] = useState<SortMode>("title");
 
-  /* -------- CONTEXT RESOLUTION (URL → DATA) -------- */
+
+
+  
+  /* -------- CONTEXT RESOLUTION (URL → DOMAIN) -------- */
   useEffect(() => {
     let cancelled = false;
 
     async function resolveContext() {
       setViewState("loading-user");
 
-      // 1. Resolve user
       const user = await getLocalUserByUsername(username);
       if (!user) {
         setViewState("user-not-found");
@@ -77,11 +85,9 @@ export function LibraryShell({
         return;
       }
 
-      // 2. Load shelves
       const allShelves = await loadShelves(user.id);
       setShelves(allShelves);
 
-      // 3. Resolve shelf (slug → id)
       let resolvedShelf: Shelf | undefined;
 
       if (shelf === "default") {
@@ -97,14 +103,12 @@ export function LibraryShell({
         return;
       }
 
-      // 4. Load collections for shelf
       const shelfCollections = await loadCollections(
         user.id,
         resolvedShelf.id
       );
       setCollections(shelfCollections);
 
-      // 5. Validate collection (if any)
       if (collection) {
         const ok = await collectionExists(
           user.id,
@@ -130,26 +134,49 @@ export function LibraryShell({
     };
   }, [username, shelf, collection]);
 
-  /* -------- LOAD BOOK DATA -------- */
+  /* -------- LOAD DATA -------- */
   useEffect(() => {
     if (viewState !== "ready" || !userId || !resolvedShelfId) return;
 
-    async function load() {
-      const allBooks = await loadBooks();
-      const allUserBooks = await loadUserBooks();
+    const uid = userId;
 
-      const filteredUserBooks = allUserBooks.filter(
-        (ub) =>
-          ub.userId === userId &&
-          ub.shelfId === resolvedShelfId
+    async function load() {
+      const books = await loadBooks();
+      const userBooks = await loadUserBooks(uid);
+
+      const filteredUserBooks = userBooks.filter(
+        (ub) => ub.shelfId === resolvedShelfId
       );
 
-      setBooks(allBooks);
+      setAllBooks(books);
       setUserBooks(filteredUserBooks);
     }
 
     load();
   }, [viewState, userId, resolvedShelfId]);
+
+  /* -------- DERIVED VIEW (THE ONLY LIST UI MAY USE) -------- */
+  const visibleItems = userBooks
+    .map((ub) => {
+      const book = allBooks.find((b) => b.id === ub.bookId);
+      if (!book) return null;
+
+      return {
+        ...book,
+        userBookId: ub.id,
+        readingStatus: ub.readingStatus,
+        shelfId: ub.shelfId,
+        syncState: ub.syncState,
+      };
+    })
+    .filter(Boolean) as Array<
+      BookListItem & {
+        userBookId: ID;
+        readingStatus: UserBook["readingStatus"];
+        shelfId: ID;
+        syncState?: UserBook["syncState"];
+      }
+    >;
 
   /* -------- ADD -------- */
   function addBook() {
@@ -162,7 +189,7 @@ export function LibraryShell({
 
   /* -------- SAVE -------- */
   async function saveBookAndUser(book: BookListItem) {
-    setBooks((prev) =>
+    setAllBooks((prev) =>
       prev.some((b) => b.id === book.id)
         ? prev.map((b) => (b.id === book.id ? book : b))
         : [...prev, book]
@@ -177,8 +204,8 @@ export function LibraryShell({
         userId: userId!,
         bookId: book.id,
         shelfId: resolvedShelfId!,
-        syncState: "pending",
         readingStatus: "unread",
+        syncState: "pending",
         createdAt: Date.now(),
       },
     ]);
@@ -187,7 +214,6 @@ export function LibraryShell({
   }
 
   /* -------- VIEW STATES -------- */
-
   if (viewState !== "ready") {
     const msg =
       viewState === "user-not-found"
@@ -208,9 +234,10 @@ export function LibraryShell({
     );
   }
 
-  /* -------- MAIN UI -------- */
 
+  /* -------- MAIN UI -------- */
   const activeShelfSlug = shelf === "default" ? "home" : shelf;
+const isLibraryView = shelf === "library";
 
   return (
     <div className="h-full flex flex-col">
@@ -240,13 +267,20 @@ export function LibraryShell({
         activeCollection={collection}
       />
 
+<LibraryModeSwitcher
+  username={username}
+  activeMode={isLibraryView ? "library" : "shelf"}
+  shelfSlug={activeShelfSlug}
+/>
+
+<SortSwitcher value={sortMode} onChange={setSortMode} />
+
       <LibraryHeader onAddBook={addBook} />
 
       <LibraryContent
-        books={books}
-        userBooks={userBooks}
+        books={visibleItems}
         onSelectBook={(id) => {
-          const b = books.find((x) => x.id === id);
+          const b = visibleItems.find((x) => x.id === id);
           if (b) setEditing(b);
         }}
         onSetReadingStatus={() => {}}

@@ -79,24 +79,56 @@ export async function saveUserBook(userBook: UserBook) {
   return withStore(USER_BOOK_STORE, "readwrite", (s) => s.put(userBook));
 }
 
-export async function loadUserBooks(): Promise<UserBook[]> {
-  return withStore(USER_BOOK_STORE, "readonly", (s) => s.getAll());
+export async function loadUserBooks(userId: ID): Promise<UserBook[]> {
+  const adapter = new IndexedDBAdapter();
+
+  console.log("📦 loadUserBooks", {
+    userId,
+    key: storageKeys.userBooks(),
+  });
+
+  const result =
+    (await adapter.get<UserBook[]>(
+      storageKeys.userBooks(),
+      { type: "user", userId }
+    )) ?? [];
+
+  console.log("📦 loadUserBooks RESULT", {
+    userId,
+    result,
+  });
+
+  return result;
 }
+
+
 
 
 /**
  * Load shelves for a given user (offline-first).
  */
 export async function loadShelves(userId: ID): Promise<Shelf[]> {
-  const adapter: StorageAdapter = new IndexedDBAdapter();
+  const adapter = new IndexedDBAdapter();
 
-  return (
-    (await adapter.get<Shelf[]>(storageKeys.shelves(), {
-      type: "user",
-      userId,
-    })) ?? []
-  );
+  console.log("🗂️ loadShelves", {
+    userId,
+    key: storageKeys.shelves(),
+  });
+
+  const result =
+    (await adapter.get<Shelf[]>(
+      storageKeys.shelves(),
+      { type: "user", userId }
+    )) ?? [];
+
+  console.log("🗂️ loadShelves RESULT", {
+    userId,
+    result,
+  });
+
+  return result;
 }
+
 
 /**
  * Load collections for a shelf (LO-FI stub).
