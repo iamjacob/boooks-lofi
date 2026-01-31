@@ -23,6 +23,7 @@ export interface UserBook {
   /** Personal state */
   readingStatus: ReadingStatus;
   tagIds?: ID[];
+  syncState?: "local" | "pending" | "synced" | "error";
 
   /** Optional 3D placement (future) */
   libraryPlacement?: {

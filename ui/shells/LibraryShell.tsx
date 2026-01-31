@@ -160,7 +160,8 @@ export function LibraryShell({
         id: crypto.randomUUID(),
         userId: userId!,
         bookId: book.id,
-        shelfId: resolvedShelfId!, // ✅ FIXED
+        shelfId: resolvedShelfId!,
+        syncState: "pending",
         readingStatus: "unread",
         createdAt: Date.now(),
       },
