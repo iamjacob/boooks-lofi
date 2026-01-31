@@ -1,35 +1,42 @@
-// ui/components/library/ShelfSwitcher.tsx
-import { ID } from "@/core/ids/id";
-import { Shelf } from "@/ui/mocks/shelves.mock";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { Shelf } from "@/core/models/shelf";
 
 type Props = {
+  username: string;          // 👈 DEN MANGLEDE
   shelves: Shelf[];
-  activeShelfId: ID;
-  onSelectShelf: (id: ID) => void;
+  activeShelfSlug: string;
 };
 
 export function ShelfSwitcher({
+  username,
   shelves,
-  activeShelfId,
-  onSelectShelf,
+  activeShelfSlug,
 }: Props) {
+  const router = useRouter();
+
+  function goToShelf(slug: string) {
+    router.push(`/@${username}/${slug}`);
+  }
+
   return (
-    <div className="flex gap-2 px-4 py-2 border-b border-neutral-800 overflow-x-auto">
+    <div className="flex gap-2 overflow-x-auto p-2">
       {shelves.map((shelf) => {
-        const active = shelf.id === activeShelfId;
+        const isActive = shelf.slug === activeShelfSlug;
 
         return (
           <button
             key={shelf.id}
-            onClick={() => onSelectShelf(shelf.id)}
-            className={[
-              "px-3 py-1.5 rounded-full text-sm whitespace-nowrap",
-              active
-                ? "bg-white text-black"
-                : "bg-neutral-800 text-neutral-300",
-            ].join(" ")}
+            onClick={() => goToShelf(shelf.slug)}
+            className={`px-3 py-1 rounded-full text-sm whitespace-nowrap
+              ${
+                isActive
+                  ? "bg-white text-black"
+                  : "bg-neutral-800 text-neutral-300"
+              }`}
           >
-            {shelf.name}
+            {shelf.title}
           </button>
         );
       })}

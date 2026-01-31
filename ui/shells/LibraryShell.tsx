@@ -6,16 +6,20 @@ import { LibraryContent } from "@/ui/components/library/LibraryContent";
 import { BookEditor } from "@/ui/components/library/BookEditor";
 import { BookListItem } from "@/ui/models/bookListItem";
 import { UserBook } from "@/core/models/userBook";
+import { Shelf } from "@/core/models/shelf";
 import {
   loadBooks,
   loadUserBooks,
   saveBook,
   saveUserBook,
   loadShelves,
+  loadCollections,
 } from "@/core/db/libraryDb";
 import { getLocalUserByUsername } from "@/core/users/getLocalUser";
 import { collectionExists } from "@/core/collections/collectionsExists";
 import { ID } from "@/core/ids/id";
+import { ShelfSwitcher } from "@/ui/components/library/ShelfSwitcher";
+import { CollectionSwitcher } from "@/ui/components/library/CollectionSwitcher";
 
 /* ---------------- TYPES ---------------- */
 
@@ -49,7 +53,12 @@ export function LibraryShell({
   const [userId, setUserId] = useState<ID | null>(null);
   const [resolvedShelfId, setResolvedShelfId] = useState<ID | null>(null);
 
-  /* -------- CONTEXT RESOLUTION -------- */
+  const [shelves, setShelves] = useState<Shelf[]>([]);
+  const [collections, setCollections] = useState<
+    { id: string; title: string }[]
+  >([]);
+
+  /* -------- CONTEXT RESOLUTION (URL → DATA) -------- */
   useEffect(() => {
     let cancelled = false;
 
@@ -58,7 +67,6 @@ export function LibraryShell({
 
       // 1. Resolve user
       const user = await getLocalUserByUsername(username);
-
       if (!user) {
         setViewState("user-not-found");
         return;
@@ -69,17 +77,19 @@ export function LibraryShell({
         return;
       }
 
-      // 2. Resolve shelf slug → shelf.id
-      const shelves = await loadShelves(user.id);
+      // 2. Load shelves
+      const allShelves = await loadShelves(user.id);
+      setShelves(allShelves);
 
-      let resolvedShelf;
+      // 3. Resolve shelf (slug → id)
+      let resolvedShelf: Shelf | undefined;
 
       if (shelf === "default") {
-        resolvedShelf = shelves.find(
+        resolvedShelf = allShelves.find(
           (s) => s.id === user.defaultShelfId
         );
       } else {
-        resolvedShelf = shelves.find((s) => s.slug === shelf);
+        resolvedShelf = allShelves.find((s) => s.slug === shelf);
       }
 
       if (!resolvedShelf) {
@@ -87,7 +97,14 @@ export function LibraryShell({
         return;
       }
 
-      // 3. Resolve collection (optional)
+      // 4. Load collections for shelf
+      const shelfCollections = await loadCollections(
+        user.id,
+        resolvedShelf.id
+      );
+      setCollections(shelfCollections);
+
+      // 5. Validate collection (if any)
       if (collection) {
         const ok = await collectionExists(
           user.id,
@@ -108,13 +125,12 @@ export function LibraryShell({
     }
 
     resolveContext();
-
     return () => {
       cancelled = true;
     };
   }, [username, shelf, collection]);
 
-  /* -------- LOAD DATA (ONLY WHEN READY) -------- */
+  /* -------- LOAD BOOK DATA -------- */
   useEffect(() => {
     if (viewState !== "ready" || !userId || !resolvedShelfId) return;
 
@@ -194,6 +210,8 @@ export function LibraryShell({
 
   /* -------- MAIN UI -------- */
 
+  const activeShelfSlug = shelf === "default" ? "home" : shelf;
+
   return (
     <div className="h-full flex flex-col">
       <div
@@ -205,9 +223,22 @@ export function LibraryShell({
         }}
       >
         <h1>@{username}</h1>
-        <p>Shelf: <strong>{shelf}</strong></p>
+        <p>Shelf: <strong>{activeShelfSlug}</strong></p>
         <p>Collection: <strong>{collection ?? "—"}</strong></p>
       </div>
+
+      <ShelfSwitcher
+        username={username}
+        shelves={shelves}
+        activeShelfSlug={activeShelfSlug}
+      />
+
+      <CollectionSwitcher
+        username={username}
+        shelfSlug={activeShelfSlug}
+        collections={collections}
+        activeCollection={collection}
+      />
 
       <LibraryHeader onAddBook={addBook} />
 
