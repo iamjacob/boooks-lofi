@@ -1,11 +1,22 @@
 import { BookListItem } from "@/ui/models/bookListItem";
 import { UserBook } from "@/core/models/userBook";
+import { Shelf } from "@/core/models/shelf";
+import { StorageAdapter } from "@/storage/adapter";
+import { storageKeys } from "@/storage/keys";
+import { IndexedDBAdapter } from "@/storage/idb";
+import { ID } from "@/core/ids/id";
 
 const DB_NAME = "boooks-library";
 const DB_VERSION = 1;
 
 const BOOK_STORE = "books";
 const USER_BOOK_STORE = "userBooks";
+
+export type Collection = {
+  id: string;
+  shelfId: ID;
+  title: string;
+};
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -70,4 +81,32 @@ export async function saveUserBook(userBook: UserBook) {
 
 export async function loadUserBooks(): Promise<UserBook[]> {
   return withStore(USER_BOOK_STORE, "readonly", (s) => s.getAll());
+}
+
+
+/**
+ * Load shelves for a given user (offline-first).
+ */
+export async function loadShelves(userId: ID): Promise<Shelf[]> {
+  const adapter: StorageAdapter = new IndexedDBAdapter();
+
+  return (
+    (await adapter.get<Shelf[]>(storageKeys.shelves(), {
+      type: "user",
+      userId,
+    })) ?? []
+  );
+}
+
+/**
+ * Load collections for a shelf (LO-FI stub).
+ */
+export async function loadCollections(
+  userId: ID,
+  shelfId: ID
+): Promise<Collection[]> {
+  // 🔮 FUTURE:
+  // load from storageKeys.collections(shelfId)
+
+  return [];
 }

@@ -1,23 +1,18 @@
 import { ID } from '@/core/ids/id';
 
-export type ShelfVisibility =
-  | 'private'
-  | 'unlisted'
-  | 'public';
-
 export interface Shelf {
   id: ID;
 
   ownerId: ID;
 
   title: string;
-  slug?: string;
+  slug: string; // 👈 REQUIRED for routing
 
-  visibility: ShelfVisibility;
+  visibility: "private" | "public";
 
   /** Visual / world settings */
   settings?: {
-    layout: 'grid' | 'row' | 'stack' | 'spatial';
+    layout: 'list' | 'spatial';
     theme?: 'light' | 'dark' | 'bw';
     showCovers?: boolean;
   };

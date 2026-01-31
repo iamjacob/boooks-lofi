@@ -11,8 +11,11 @@ import {
   loadUserBooks,
   saveBook,
   saveUserBook,
+  loadShelves,
 } from "@/core/db/libraryDb";
 import { getLocalUserByUsername } from "@/core/users/getLocalUser";
+import { collectionExists } from "@/core/collections/collectionsExists";
+import { ID } from "@/core/ids/id";
 
 /* ---------------- TYPES ---------------- */
 
@@ -22,22 +25,13 @@ type LibraryShellProps = {
   collection: string | null;
 };
 
-type UserState =
-  | "user-loading"
+type ViewState =
+  | "loading-user"
   | "user-not-found"
   | "user-private"
-  | "user-ok";
-
-/* ---------------- DUMMY ONLINE FETCH ---------------- */
-/* Future-proof: replace with real API call later */
-async function fetchPublicUserOnline(username: string) {
-  // 🔮 FUTURE:
-  // const res = await fetch(`/api/users/${username}`)
-  // if (!res.ok) return null
-  // return await res.json()
-
-  return null; // offline / no backend yet
-}
+  | "shelf-not-found"
+  | "collection-not-found"
+  | "ready";
 
 /* ---------------- COMPONENT ---------------- */
 
@@ -46,60 +40,100 @@ export function LibraryShell({
   shelf,
   collection,
 }: LibraryShellProps) {
+  const [viewState, setViewState] = useState<ViewState>("loading-user");
+
   const [books, setBooks] = useState<BookListItem[]>([]);
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [editing, setEditing] = useState<BookListItem | null>(null);
 
-  const [userState, setUserState] = useState<UserState>("user-loading");
+  const [userId, setUserId] = useState<ID | null>(null);
+  const [resolvedShelfId, setResolvedShelfId] = useState<ID | null>(null);
 
-  /* -------- USER EXISTENCE CHECK (OFFLINE → ONLINE) -------- */
+  /* -------- CONTEXT RESOLUTION -------- */
   useEffect(() => {
     let cancelled = false;
 
-    async function checkUser() {
-      setUserState("user-loading");
+    async function resolveContext() {
+      setViewState("loading-user");
 
-      // 1️⃣ OFFLINE FIRST
-      const localUser = await getLocalUserByUsername(username);
+      // 1. Resolve user
+      const user = await getLocalUserByUsername(username);
 
-      if (localUser) {
-        if (localUser.mode === "private") {
-          setUserState("user-private");
-        } else {
-          setUserState("user-ok");
-        }
+      if (!user) {
+        setViewState("user-not-found");
         return;
       }
 
-      // 2️⃣ ONLINE (PREPARED, SAFE STUB)
-      if (navigator.onLine) {
-        const remoteUser = await fetchPublicUserOnline(username);
-        if (remoteUser) {
-          setUserState("user-ok");
+      if (user.mode === "private") {
+        setViewState("user-private");
+        return;
+      }
+
+      // 2. Resolve shelf slug → shelf.id
+      const shelves = await loadShelves(user.id);
+
+      let resolvedShelf;
+
+      if (shelf === "default") {
+        resolvedShelf = shelves.find(
+          (s) => s.id === user.defaultShelfId
+        );
+      } else {
+        resolvedShelf = shelves.find((s) => s.slug === shelf);
+      }
+
+      if (!resolvedShelf) {
+        setViewState("shelf-not-found");
+        return;
+      }
+
+      // 3. Resolve collection (optional)
+      if (collection) {
+        const ok = await collectionExists(
+          user.id,
+          resolvedShelf.id,
+          collection
+        );
+        if (!ok) {
+          setViewState("collection-not-found");
           return;
         }
       }
 
-      // 3️⃣ NOT FOUND
       if (!cancelled) {
-        setUserState("user-not-found");
+        setUserId(user.id);
+        setResolvedShelfId(resolvedShelf.id);
+        setViewState("ready");
       }
     }
 
-    checkUser();
+    resolveContext();
 
     return () => {
       cancelled = true;
     };
-  }, [username]);
+  }, [username, shelf, collection]);
 
-  /* -------- LOAD LIBRARY DATA (ONLY IF USER OK) -------- */
+  /* -------- LOAD DATA (ONLY WHEN READY) -------- */
   useEffect(() => {
-    if (userState !== "user-ok") return;
+    if (viewState !== "ready" || !userId || !resolvedShelfId) return;
 
-    loadBooks().then(setBooks);
-    loadUserBooks().then(setUserBooks);
-  }, [userState]);
+    async function load() {
+      const allBooks = await loadBooks();
+      const allUserBooks = await loadUserBooks();
+
+      const filteredUserBooks = allUserBooks.filter(
+        (ub) =>
+          ub.userId === userId &&
+          ub.shelfId === resolvedShelfId
+      );
+
+      setBooks(allBooks);
+      setUserBooks(filteredUserBooks);
+    }
+
+    load();
+  }, [viewState, userId, resolvedShelfId]);
 
   /* -------- ADD -------- */
   function addBook() {
@@ -110,83 +144,57 @@ export function LibraryShell({
     });
   }
 
-  /* -------- SAVE (BOOK + USERBOOK) -------- */
+  /* -------- SAVE -------- */
   async function saveBookAndUser(book: BookListItem) {
-    setBooks((prev) => {
-      const exists = prev.find((b) => b.id === book.id);
-      return exists
+    setBooks((prev) =>
+      prev.some((b) => b.id === book.id)
         ? prev.map((b) => (b.id === book.id ? book : b))
-        : [book, ...prev];
-    });
+        : [...prev, book]
+    );
 
     await saveBook(book);
 
-    setUserBooks((prev) => {
-      const exists = prev.find((u) => u.bookId === book.id);
-      if (exists) return prev;
-
-      const userBook: UserBook = {
+    setUserBooks((prev) => [
+      ...prev,
+      {
         id: crypto.randomUUID(),
+        userId: userId!,
         bookId: book.id,
+        shelfId: resolvedShelfId!, // ✅ FIXED
         readingStatus: "unread",
         createdAt: Date.now(),
-      };
-
-      saveUserBook(userBook);
-      return [...prev, userBook];
-    });
+      },
+    ]);
 
     setEditing(null);
   }
 
-  /* -------- UPDATE READING STATUS -------- */
-  function setReadingStatus(
-    bookId: string,
-    status: UserBook["readingStatus"]
-  ) {
-    setUserBooks((prev) =>
-      prev.map((u) =>
-        u.bookId === bookId
-          ? { ...u, readingStatus: status, updatedAt: Date.now() }
-          : u
-      )
-    );
+  /* -------- VIEW STATES -------- */
 
-    const ub = userBooks.find((u) => u.bookId === bookId);
-    if (ub) {
-      saveUserBook({ ...ub, readingStatus: status, updatedAt: Date.now() });
-    }
-  }
+  if (viewState !== "ready") {
+    const msg =
+      viewState === "user-not-found"
+        ? "User does not exist."
+        : viewState === "user-private"
+        ? "This library is private."
+        : viewState === "shelf-not-found"
+        ? "Shelf does not exist."
+        : viewState === "collection-not-found"
+        ? "Collection does not exist."
+        : "Loading…";
 
-  /* -------- USER STATE GATES -------- */
-
-  if (userState === "user-loading") {
-    return <div style={{ padding: 24 }}>Loading user…</div>;
-  }
-
-  if (userState === "user-not-found") {
     return (
       <div style={{ padding: 24 }}>
         <h1>@{username}</h1>
-        <p>User does not exist.</p>
+        <p>{msg}</p>
       </div>
     );
   }
 
-  if (userState === "user-private") {
-    return (
-      <div style={{ padding: 24 }}>
-        <h1>@{username}</h1>
-        <p>This library is private.</p>
-      </div>
-    );
-  }
-
-  /* -------- MAIN UI (USER OK) -------- */
+  /* -------- MAIN UI -------- */
 
   return (
     <div className="h-full flex flex-col">
-      {/* CONTEXT HEADER */}
       <div
         style={{
           padding: 24,
@@ -196,12 +204,8 @@ export function LibraryShell({
         }}
       >
         <h1>@{username}</h1>
-        <p>
-          Shelf: <strong>{shelf}</strong>
-        </p>
-        <p>
-          Collection: <strong>{collection ?? "—"}</strong>
-        </p>
+        <p>Shelf: <strong>{shelf}</strong></p>
+        <p>Collection: <strong>{collection ?? "—"}</strong></p>
       </div>
 
       <LibraryHeader onAddBook={addBook} />
@@ -213,7 +217,7 @@ export function LibraryShell({
           const b = books.find((x) => x.id === id);
           if (b) setEditing(b);
         }}
-        onSetReadingStatus={setReadingStatus}
+        onSetReadingStatus={() => {}}
       />
 
       {editing && (

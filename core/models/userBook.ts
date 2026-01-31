@@ -1,34 +1,38 @@
-import { ID } from '@/core/ids/id';
+import { ID } from "@/core/ids/id";
 
 /**
- * UserBook = ownership + canonical placement.
+ * UserBook = a user's canonical relationship to a book.
  *
  * INVARIANTS:
  * - Exactly ONE UserBook per user per book
- * - Library placement is canonical
- * - Shelves NEVER own books
+ * - UserBook always belongs to EXACTLY ONE shelf
+ * - Shelves NEVER own books (they are just contexts)
  */
 export type ReadingStatus = "unread" | "reading" | "finished";
 
 export interface UserBook {
   id: ID;
 
-  userId?: ID;
+  /** Ownership */
+  userId: ID;
   bookId: ID;
 
-  /** Canonical library placement (ALWAYS exists) */
+  /** Canonical shelf placement */
+  shelfId: ID;
+
+  /** Personal state */
+  readingStatus: ReadingStatus;
+  tagIds?: ID[];
+
+  /** Optional 3D placement (future) */
   libraryPlacement?: {
     position: [number, number, number];
     rotation: [number, number, number];
   };
 
-  /** Personal meaning */
-  tagIds?: ID[];
-  readingStatus: ReadingStatus;
-
-  /** Ownership / rights */
+  /** Ownership / rights (future) */
   ownership?: {
-    type: 'local' | 'license' | 'nft' | 'donation';
+    type: "local" | "license" | "nft" | "donation";
     ownerIdentityId?: ID;
     chain?: string;
     tokenId?: string;

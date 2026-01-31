@@ -1,10 +1,11 @@
-import { createId } from '@/core/ids/id';
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
-import { Book } from '@/core/models/book';
-import { UserBook } from '@/core/models/userBook';
-import { generateLibraryPlacement } from './generateLibraryPlacement';
-import { logEvent } from '@/core/history/logEvent';
+import { createId } from "@/core/ids/id";
+import { StorageAdapter } from "@/storage/adapter";
+import { storageKeys } from "@/storage/keys";
+import { Book } from "@/core/models/book";
+import { UserBook } from "@/core/models/userBook";
+import { generateLibraryPlacement } from "./generateLibraryPlacement";
+import { logEvent } from "@/core/history/logEvent";
+import { ID } from "@/core/ids/id";
 
 /**
  * Add a book to the system and the user's Library.
@@ -12,12 +13,12 @@ import { logEvent } from '@/core/history/logEvent';
  * RULES:
  * - Book is global
  * - UserBook is per-user
- * - Library placement is ALWAYS created
- * - Shelves are OPTIONAL and handled later
+ * - Shelf placement MUST be explicit
  */
 export async function addBook(
   adapter: StorageAdapter,
-  userId: string,
+  userId: ID,
+  shelfId: ID,
   input: {
     title?: string;
     description?: string;
@@ -26,7 +27,7 @@ export async function addBook(
 ): Promise<{ book: Book; userBook: UserBook }> {
   const now = Date.now();
 
-  // 1️⃣ Create global Book (draft by default)
+  /* 1️⃣ Create global Book */
   const books =
     (await adapter.get<Book[]>(storageKeys.books)) ?? [];
 
@@ -36,19 +37,18 @@ export async function addBook(
     description: input.description,
     language: input.language,
     createdBy: userId,
-    state: 'draft',
+    state: "draft",
     createdAt: now,
   };
 
   books.push(book);
-
   await adapter.set(storageKeys.books, books);
 
-  // 2️⃣ Create UserBook (ownership + library placement)
+  /* 2️⃣ Create UserBook */
   const userBooks =
     (await adapter.get<UserBook[]>(
       storageKeys.userBooks(),
-      { type: 'user', userId }
+      { type: "user", userId }
     )) ?? [];
 
   const placement = generateLibraryPlacement(userBooks.length);
@@ -57,12 +57,12 @@ export async function addBook(
     id: `userBook_${createId()}`,
     userId,
     bookId: book.id,
-
+    shelfId, // ✅ EXPLICIT
+    readingStatus: "unread",
     libraryPlacement: {
       position: placement.position,
       rotation: placement.rotation,
     },
-
     createdAt: now,
   };
 
@@ -71,12 +71,13 @@ export async function addBook(
   await adapter.set(
     storageKeys.userBooks(),
     userBooks,
-    { type: 'user', userId }
+    { type: "user", userId }
   );
 
-  // 3️⃣ History
-  await logEvent(adapter, userId, 'user_book.added', {
+  /* 3️⃣ History */
+  await logEvent(adapter, userId, "user_book.added", {
     bookId: book.id,
+    shelfId,
   });
 
   return { book, userBook };

@@ -23,6 +23,42 @@ AI systems MUST respect this document.
   - placement (later)
   - tags / notes (later)
 
+
+📙 ShelfInstance — Placement & Expression (CONTEXTUAL)
+
+A ShelfInstance represents how a UserBook appears on a Shelf.
+
+Binds a UserBook to a Shelf
+
+Defines placement, layout, and expression
+
+Can be social, shared, or published
+
+Can be created, removed, or duplicated
+
+MAY contain:
+
+shelfId
+
+userBookId
+
+layout position (3D / 2D)
+
+rating
+
+notes
+
+visibility (private | public)
+
+social metadata
+
+MUST NOT:
+
+duplicate ownership
+
+redefine canonical book data
+
+replace UserBook
 AI must NEVER mix these concerns.
 
 ---
