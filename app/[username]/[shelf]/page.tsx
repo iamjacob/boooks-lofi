@@ -11,7 +11,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <ClientApp
-      username="__active__"
+      rawUsername="__active__"
       shelf={shelf}
       collection={null}
     />

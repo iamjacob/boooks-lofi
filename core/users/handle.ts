@@ -1,9 +1,12 @@
+/**
+ * Generate a safe public handle for routing (@username)
+ * LO-FI, no deps, deterministic
+ */
 export function toHandle(input: string) {
-  // super LO-FI slugify (no packages)
   return input
     .trim()
     .toLowerCase()
-    .replace(/@/g, "")
+    .replace(/^@+/, "")
     .replace(/\s+/g, "_")
     .replace(/[^a-z0-9_]/g, "")
     .slice(0, 24);

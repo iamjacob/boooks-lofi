@@ -13,7 +13,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <ClientApp
-      username={username}
+      rawUsername={username}
       shelf={shelf}
       collection={collection}
     />

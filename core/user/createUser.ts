@@ -4,6 +4,7 @@ import { storageKeys } from '@/storage/keys';
 import { User } from '@/core/models/user';
 import { Shelf } from '@/core/models/shelf';
 import { logEvent } from '@/core/history/logEvent';
+import { toHandle } from "@/core/users/handle";
 
 /**
  * Create a new user AND a default shelf.
@@ -34,13 +35,19 @@ export async function createUser(
     createdAt: now,
   };
 
-  const user: User = {
-    id: userId,
-    displayName: input?.displayName,
-    mode: input?.mode ?? 'private',
-    defaultShelfId: shelfId,
-    createdAt: now,
-  };
+
+const displayName = input?.displayName?.trim();
+const handle = toHandle(displayName || userId);
+
+const user: User = {
+  id: userId,
+  handle,                // ✅ REQUIRED
+  displayName,
+  mode: input?.mode ?? "private",
+  defaultShelfId: shelfId,
+  createdAt: Date.now(),
+};
+
 
   // 1️⃣ Save user
   users.push(user);

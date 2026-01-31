@@ -1,11 +1,10 @@
-// core/bootstrap/bootstrapUser.ts
-
 import { createId } from '@/core/ids/id';
 import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
 import { Device } from '@/core/identity/device';
 import { User } from '@/core/models/user';
 import { Shelf } from '@/core/models/shelf';
+import { toHandle } from '@/core/users/handle';
 
 export async function bootstrapUser(adapter: StorageAdapter) {
   // ─────────────────────────────
@@ -62,8 +61,12 @@ export async function bootstrapUser(adapter: StorageAdapter) {
       createdAt: Date.now(),
     };
 
+    // 👇 IMPORTANT: handle is REQUIRED
+    const handle = toHandle(userId); // dummy but stable (e.g. user_abcd123)
+
     const user: User = {
       id: userId,
+      handle,                // ✅ REQUIRED FOR ROUTING
       mode: 'private',
       defaultShelfId,
       createdAt: Date.now(),
