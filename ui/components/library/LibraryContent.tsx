@@ -1,16 +1,31 @@
 import { BookListMobile } from "@/ui/components/shelf/BookListMobile";
 import { BookListItem } from "@/ui/models/bookListItem";
-import { ID } from "@/core/ids/id";
+import { UserBook } from "@/core/models/userBook";
 
 type Props = {
   books: BookListItem[];
-  onSelectBook: (id: ID) => void;
+  userBooks: UserBook[];
+  onSelectBook: (id: string) => void;
+  onSetReadingStatus: (
+    bookId: string,
+    status: UserBook["readingStatus"]
+  ) => void;
 };
 
-export function LibraryContent({ books, onSelectBook }: Props) {
+export function LibraryContent({
+  books,
+  userBooks,
+  onSelectBook,
+  onSetReadingStatus,
+}: Props) {
   return (
     <main className="flex-1 overflow-y-auto">
-      <BookListMobile books={books} onSelect={onSelectBook} />
+      <BookListMobile
+        books={books}
+        // userBooks={userBooks}
+        onSelect={onSelectBook}
+        // onSetReadingStatus={onSetReadingStatus}
+      />
     </main>
   );
 }

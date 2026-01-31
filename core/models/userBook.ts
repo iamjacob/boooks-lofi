@@ -8,21 +8,23 @@ import { ID } from '@/core/ids/id';
  * - Library placement is canonical
  * - Shelves NEVER own books
  */
+export type ReadingStatus = "unread" | "reading" | "finished";
+
 export interface UserBook {
   id: ID;
 
-  userId: ID;
+  userId?: ID;
   bookId: ID;
 
   /** Canonical library placement (ALWAYS exists) */
-  libraryPlacement: {
+  libraryPlacement?: {
     position: [number, number, number];
     rotation: [number, number, number];
   };
 
   /** Personal meaning */
   tagIds?: ID[];
-  readingStatus?: 'unread' | 'reading' | 'finished';
+  readingStatus: ReadingStatus;
 
   /** Ownership / rights */
   ownership?: {

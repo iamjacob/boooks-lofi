@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { BookListItem } from "@/ui/models/bookListItem";
 import { BookImageEditor } from "./BookImageEditor";
 
@@ -10,8 +11,20 @@ type Props = {
 };
 
 export function BookEditor({ book, onSave, onCancel }: Props) {
+  // 🧠 LOCAL DRAFT STATE
+  const [draft, setDraft] = useState<BookListItem>(book);
+
+  // If a different book is opened, reset draft
+  useEffect(() => {
+    setDraft(book);
+  }, [book.id]);
+
   function update(patch: Partial<BookListItem>) {
-    onSave({ ...book, ...patch });
+    setDraft((d) => ({ ...d, ...patch }));
+  }
+
+  function save() {
+    onSave(draft); // 💾 COMMIT ONCE
   }
 
   return (
@@ -21,24 +34,24 @@ export function BookEditor({ book, onSave, onCancel }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold">
-          {book.title ? "Edit book" : "Add book"}
+          {draft.title ? "Edit book" : "Add book"}
         </h2>
 
         <input
           className="w-full bg-neutral-800 p-2 rounded"
           placeholder="Title"
-          value={book.title ?? ""}
+          value={draft.title ?? ""}
           onChange={(e) => update({ title: e.target.value })}
         />
 
         <input
           className="w-full bg-neutral-800 p-2 rounded"
           placeholder="Author"
-          value={book.authorName ?? ""}
+          value={draft.authorName ?? ""}
           onChange={(e) => update({ authorName: e.target.value })}
         />
 
-        <BookImageEditor book={book} onChange={onSave} />
+        <BookImageEditor book={draft} onChange={setDraft} />
 
         <div className="flex justify-end gap-2">
           <button
@@ -47,9 +60,10 @@ export function BookEditor({ book, onSave, onCancel }: Props) {
           >
             Cancel
           </button>
+
           <button
-            onClick={() => onSave(book)}
-            disabled={!book.title?.trim()}
+            onClick={save}
+            disabled={!draft.title?.trim()}
             className="px-3 py-1.5 bg-white text-black rounded"
           >
             Save
