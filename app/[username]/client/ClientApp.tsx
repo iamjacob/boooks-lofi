@@ -1,36 +1,34 @@
 "use client";
 
 import { LibraryShell } from "@/ui/shells/LibraryShell";
-import {
-  decodeUsernameFromUrl,
-} from "@/core/routing/username";
+import { decodeUsernameFromUrl } from "@/core/routing/username";
+import { userExistsOffline } from "@/core/users/userExists";
 
 export default function ClientApp({
-  username: rawUsername,
+  rawUsername,
   shelf,
   collection,
 }: {
-  username: string;
+  rawUsername: string;
   shelf: string;
   collection: string | null;
 }) {
+  // 🔑 ÉN GANG
   const { username, hasAt } = decodeUsernameFromUrl(rawUsername);
 
-  // Enforce UX contract: must use @ in URL
+  // UX rule: must use @
   if (!hasAt) {
     return (
       <div style={{ padding: 24 }}>
         <h1>@{username}</h1>
-        <p style={{ opacity: 0.6 }}>
-          Please use <code>@{username}</code> in the URL.
-        </p>
+        <p>Please use <code>@{username}</code> in the URL.</p>
       </div>
     );
   }
 
   return (
     <LibraryShell
-      username={username}
+      username={username}   // ← ALT HERFRA ER "jacob"
       shelf={shelf}
       collection={collection}
     />

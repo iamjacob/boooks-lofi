@@ -12,6 +12,7 @@ import {
   saveBook,
   saveUserBook,
 } from "@/core/db/libraryDb";
+import { getLocalUserByUsername } from "@/core/users/getLocalUser";
 
 /* ---------------- TYPES ---------------- */
 
@@ -20,6 +21,23 @@ type LibraryShellProps = {
   shelf: string;
   collection: string | null;
 };
+
+type UserState =
+  | "user-loading"
+  | "user-not-found"
+  | "user-private"
+  | "user-ok";
+
+/* ---------------- DUMMY ONLINE FETCH ---------------- */
+/* Future-proof: replace with real API call later */
+async function fetchPublicUserOnline(username: string) {
+  // 🔮 FUTURE:
+  // const res = await fetch(`/api/users/${username}`)
+  // if (!res.ok) return null
+  // return await res.json()
+
+  return null; // offline / no backend yet
+}
 
 /* ---------------- COMPONENT ---------------- */
 
@@ -32,23 +50,56 @@ export function LibraryShell({
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [editing, setEditing] = useState<BookListItem | null>(null);
 
-  const [userExists, setUserExists] = useState<boolean | null>(null);
+  const [userState, setUserState] = useState<UserState>("user-loading");
 
-  /* -------- CHECK IF USER EXISTS (PUBLIC / LO-FI) -------- */
+  /* -------- USER EXISTENCE CHECK (OFFLINE → ONLINE) -------- */
   useEffect(() => {
-    // LO-FI version:
-    // A user "exists" if they have any UserBooks locally.
-    // (Later: replace with public profile lookup / API)
-    loadUserBooks().then((ubs) => {
-      setUserExists(ubs.length > 0);
-    });
+    let cancelled = false;
+
+    async function checkUser() {
+      setUserState("user-loading");
+
+      // 1️⃣ OFFLINE FIRST
+      const localUser = await getLocalUserByUsername(username);
+
+      if (localUser) {
+        if (localUser.mode === "private") {
+          setUserState("user-private");
+        } else {
+          setUserState("user-ok");
+        }
+        return;
+      }
+
+      // 2️⃣ ONLINE (PREPARED, SAFE STUB)
+      if (navigator.onLine) {
+        const remoteUser = await fetchPublicUserOnline(username);
+        if (remoteUser) {
+          setUserState("user-ok");
+          return;
+        }
+      }
+
+      // 3️⃣ NOT FOUND
+      if (!cancelled) {
+        setUserState("user-not-found");
+      }
+    }
+
+    checkUser();
+
+    return () => {
+      cancelled = true;
+    };
   }, [username]);
 
-  /* -------- LOAD DATA -------- */
+  /* -------- LOAD LIBRARY DATA (ONLY IF USER OK) -------- */
   useEffect(() => {
+    if (userState !== "user-ok") return;
+
     loadBooks().then(setBooks);
     loadUserBooks().then(setUserBooks);
-  }, []);
+  }, [userState]);
 
   /* -------- ADD -------- */
   function addBook() {
@@ -107,30 +158,44 @@ export function LibraryShell({
     }
   }
 
+  /* -------- USER STATE GATES -------- */
 
+  if (userState === "user-loading") {
+    return <div style={{ padding: 24 }}>Loading user…</div>;
+  }
 
-if (userExists === null) {
-  return <div style={{ padding: 24 }}>Loading…</div>;
-}
-
-
-  /* -------- LOADING -------- */
-  if (userExists === null) {
+  if (userState === "user-not-found") {
     return (
       <div style={{ padding: 24 }}>
-        <p>Loading library…</p>
+        <h1>@{username}</h1>
+        <p>User does not exist.</p>
       </div>
     );
   }
 
-  
+  if (userState === "user-private") {
+    return (
+      <div style={{ padding: 24 }}>
+        <h1>@{username}</h1>
+        <p>This library is private.</p>
+      </div>
+    );
+  }
 
-  /* -------- MAIN UI -------- */
+  /* -------- MAIN UI (USER OK) -------- */
+
   return (
     <div className="h-full flex flex-col">
-      {/* CONTEXT HEADER (IRL FEEDBACK) */}
-      <div style={{ padding: 24, borderBottom: "1px solid #333", display:"flex" }}>
-        <h1>{username}</h1>
+      {/* CONTEXT HEADER */}
+      <div
+        style={{
+          padding: 24,
+          borderBottom: "1px solid #333",
+          display: "flex",
+          gap: 24,
+        }}
+      >
+        <h1>@{username}</h1>
         <p>
           Shelf: <strong>{shelf}</strong>
         </p>

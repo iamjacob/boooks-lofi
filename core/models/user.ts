@@ -9,6 +9,8 @@ export type ThemePreference =
 
 export interface User {
   id: ID;
+
+  handle: string;
   displayName?: string;
   avatarUrl?: string;
   pinHash?: string;
