@@ -13,12 +13,38 @@ import {
   saveUserBook,
 } from "@/core/db/libraryDb";
 
-export function LibraryShell() {
+/* ---------------- TYPES ---------------- */
+
+type LibraryShellProps = {
+  username: string;
+  shelf: string;
+  collection: string | null;
+};
+
+/* ---------------- COMPONENT ---------------- */
+
+export function LibraryShell({
+  username,
+  shelf,
+  collection,
+}: LibraryShellProps) {
   const [books, setBooks] = useState<BookListItem[]>([]);
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [editing, setEditing] = useState<BookListItem | null>(null);
 
-  /* -------- LOAD ON START -------- */
+  const [userExists, setUserExists] = useState<boolean | null>(null);
+
+  /* -------- CHECK IF USER EXISTS (PUBLIC / LO-FI) -------- */
+  useEffect(() => {
+    // LO-FI version:
+    // A user "exists" if they have any UserBooks locally.
+    // (Later: replace with public profile lookup / API)
+    loadUserBooks().then((ubs) => {
+      setUserExists(ubs.length > 0);
+    });
+  }, [username]);
+
+  /* -------- LOAD DATA -------- */
   useEffect(() => {
     loadBooks().then(setBooks);
     loadUserBooks().then(setUserBooks);
@@ -63,7 +89,10 @@ export function LibraryShell() {
   }
 
   /* -------- UPDATE READING STATUS -------- */
-  function setReadingStatus(bookId: string, status: UserBook["readingStatus"]) {
+  function setReadingStatus(
+    bookId: string,
+    status: UserBook["readingStatus"]
+  ) {
     setUserBooks((prev) =>
       prev.map((u) =>
         u.bookId === bookId
@@ -78,8 +107,38 @@ export function LibraryShell() {
     }
   }
 
+
+
+if (userExists === null) {
+  return <div style={{ padding: 24 }}>Loading…</div>;
+}
+
+
+  /* -------- LOADING -------- */
+  if (userExists === null) {
+    return (
+      <div style={{ padding: 24 }}>
+        <p>Loading library…</p>
+      </div>
+    );
+  }
+
+  
+
+  /* -------- MAIN UI -------- */
   return (
     <div className="h-full flex flex-col">
+      {/* CONTEXT HEADER (IRL FEEDBACK) */}
+      <div style={{ padding: 24, borderBottom: "1px solid #333", display:"flex" }}>
+        <h1>{username}</h1>
+        <p>
+          Shelf: <strong>{shelf}</strong>
+        </p>
+        <p>
+          Collection: <strong>{collection ?? "—"}</strong>
+        </p>
+      </div>
+
       <LibraryHeader onAddBook={addBook} />
 
       <LibraryContent

@@ -100,6 +100,16 @@ AI should be aware (but not implement prematurely):
 
 ---
 
+## Reading & Time Awareness
+
+Boooks treats reading time as a sacred signal, not a productivity metric.
+
+- Reading time must work fully offline
+- Time tracking must never block reading
+- Sessions are explicit (start/stop), not inferred
+- No dark patterns or pressure mechanics
+
+
 ## SUMMARY
 
 Boooks is:

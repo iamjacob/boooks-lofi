@@ -19,10 +19,24 @@ import { AddBookPanel } from '@/ui/panels/AddBookPanel'
 import { LibraryPanel } from '@/ui/panels/LibraryPanel'
 import ShelfView from '@/ui/panels/ShelfViewPanel';
 
+import { useParams } from 'next/navigation';
+import { LibraryShell } from '@/ui/shells/LibraryShell';
 
 export default function ClientApp() {
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
   const adapterRef = useRef<IndexedDBAdapter | null>(null);
+
+const params = useParams();
+
+  if (params?.username) {
+    return (
+      <LibraryShell
+        username={String(params.username)}
+        shelf={String(params.shelf ?? 'default')}
+        collection={params.collection ? String(params.collection) : null}
+      />
+    );
+  }
 
   function handleSwitchUser(userId: string) {
     setActiveUserId(userId);
@@ -91,6 +105,8 @@ export default function ClientApp() {
   if (!activeUserId) {
     return <div>Booting…</div>;
   }
+
+
 
   return (
     <div

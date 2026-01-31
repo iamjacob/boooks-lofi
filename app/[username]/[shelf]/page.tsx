@@ -1,0 +1,17 @@
+import ClientApp from "../client/ClientApp";
+
+type Props = {
+  params: Promise<{ username: string; shelf: string }>;
+};
+
+export default async function Page({ params }: Props) {
+  const { username, shelf } = await params;
+
+  return (
+    <ClientApp
+      username={username}
+      shelf={shelf}
+      collection={null}
+    />
+  );
+}
