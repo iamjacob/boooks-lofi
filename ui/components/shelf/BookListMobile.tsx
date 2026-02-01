@@ -46,6 +46,7 @@ export function BookListMobile({ books, onSelect }: Props) {
                 {book.authorName ?? "Unknown author"}
               </div>
             </div>
+            
           </li>
         );
       })}

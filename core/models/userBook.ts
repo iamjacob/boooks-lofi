@@ -18,7 +18,7 @@ export interface UserBook {
   bookId: ID;
 
   /** Canonical shelf placement */
-  shelfId: ID;
+  shelfId?: ID;
 
   /** Personal state */
   readingStatus: ReadingStatus;

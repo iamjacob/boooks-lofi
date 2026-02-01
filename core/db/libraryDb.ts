@@ -1,144 +1,70 @@
 import { BookListItem } from "@/ui/models/bookListItem";
 import { UserBook } from "@/core/models/userBook";
 import { Shelf } from "@/core/models/shelf";
-import { StorageAdapter } from "@/storage/adapter";
-import { storageKeys } from "@/storage/keys";
 import { IndexedDBAdapter } from "@/storage/idb";
+import { storageKeys } from "@/storage/keys";
 import { ID } from "@/core/ids/id";
 
-const DB_NAME = "boooks-library";
-const DB_VERSION = 1;
-
-const BOOK_STORE = "books";
-const USER_BOOK_STORE = "userBooks";
+const adapter = new IndexedDBAdapter();
+/* ---------------- COLLECTIONS (FASE 1 STUB) ---------------- */
 
 export type Collection = {
   id: string;
-  shelfId: ID;
+  shelfId: string;
   title: string;
 };
 
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-
-    req.onupgradeneeded = () => {
-      const db = req.result;
-
-      if (!db.objectStoreNames.contains(BOOK_STORE)) {
-        db.createObjectStore(BOOK_STORE, { keyPath: "id" });
-      }
-
-      if (!db.objectStoreNames.contains(USER_BOOK_STORE)) {
-        db.createObjectStore(USER_BOOK_STORE, { keyPath: "id" });
-      }
-    };
-
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+export async function loadCollections(
+  _userId: string,
+  _shelfId: string
+): Promise<Collection[]> {
+  // Phase 1: no collections yet
+  return [];
 }
 
-function withStore<T>(
-  storeName: string,
-  mode: IDBTransactionMode,
-  fn: (store: IDBObjectStore) => IDBRequest<T>
-): Promise<T> {
-  return openDB().then(
-    (db) =>
-      new Promise((resolve, reject) => {
-        const tx = db.transaction(storeName, mode);
-        const store = tx.objectStore(storeName);
-        const req = fn(store);
+/* ---------------- BOOKS (GLOBAL) ---------------- */
 
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+export async function loadBooks(): Promise<BookListItem[]> {
+  return (await adapter.get<BookListItem[]>(storageKeys.books)) ?? [];
+}
 
-        tx.oncomplete = () => db.close();
-        tx.onerror = () => {
-          db.close();
-          reject(tx.error);
-        };
-      })
+export async function saveBook(book: BookListItem): Promise<void> {
+  const books = (await loadBooks()) ?? [];
+  const i = books.findIndex((b) => b.id === book.id);
+
+  if (i >= 0) books[i] = book;
+  else books.push(book);
+
+  await adapter.set(storageKeys.books, books);
+}
+
+/* ---------------- USER BOOKS (PER USER) ---------------- */
+
+export async function loadUserBooks(userId: ID): Promise<UserBook[]> {
+  return (
+    (await adapter.get<UserBook[]>(storageKeys.userBooks(userId))) ?? []
   );
 }
 
-/* ---------------- BOOKS ---------------- */
+export async function saveUserBook(userBook: UserBook): Promise<void> {
+  if (!userBook.userId) {
+    throw new Error("saveUserBook: userBook.userId is required");
+  }
 
-export async function saveBook(book: BookListItem) {
-  return withStore(BOOK_STORE, "readwrite", (s) => s.put(book));
+  const userId = userBook.userId;
+  const list = (await loadUserBooks(userId)) ?? [];
+  const i = list.findIndex((x) => x.id === userBook.id);
+
+  if (i >= 0) list[i] = userBook;
+  else list.push(userBook);
+
+  await adapter.set(storageKeys.userBooks(userId), list);
 }
 
-export async function loadBooks(): Promise<BookListItem[]> {
-  return withStore(BOOK_STORE, "readonly", (s) => s.getAll());
-}
+/* ---------------- SHELVES (PER USER) ---------------- */
 
-/* -------------- USER BOOKS -------------- */
-
-export async function saveUserBook(userBook: UserBook) {
-  return withStore(USER_BOOK_STORE, "readwrite", (s) => s.put(userBook));
-}
-
-export async function loadUserBooks(userId: ID): Promise<UserBook[]> {
-  const adapter = new IndexedDBAdapter();
-
-  console.log("📦 loadUserBooks", {
-    userId,
-    key: storageKeys.userBooks(),
-  });
-
-  const result =
-    (await adapter.get<UserBook[]>(
-      storageKeys.userBooks(),
-      { type: "user", userId }
-    )) ?? [];
-
-  console.log("📦 loadUserBooks RESULT", {
-    userId,
-    result,
-  });
-
-  return result;
-}
-
-
-
-
-/**
- * Load shelves for a given user (offline-first).
- */
 export async function loadShelves(userId: ID): Promise<Shelf[]> {
-  const adapter = new IndexedDBAdapter();
-
-  console.log("🗂️ loadShelves", {
-    userId,
-    key: storageKeys.shelves(),
-  });
-
-  const result =
-    (await adapter.get<Shelf[]>(
-      storageKeys.shelves(),
-      { type: "user", userId }
-    )) ?? [];
-
-  console.log("🗂️ loadShelves RESULT", {
-    userId,
-    result,
-  });
-
-  return result;
-}
-
-
-/**
- * Load collections for a shelf (LO-FI stub).
- */
-export async function loadCollections(
-  userId: ID,
-  shelfId: ID
-): Promise<Collection[]> {
-  // 🔮 FUTURE:
-  // load from storageKeys.collections(shelfId)
-
-  return [];
+  return (
+    (await adapter.get<Shelf[]>(storageKeys.shelves(userId))) ?? []
+  );
 }

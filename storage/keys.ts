@@ -13,7 +13,7 @@ export const storageKeys = {
   // PER-USER (scoped via StorageScope)
   // ─────────────────────────────
   sessions: () => 'sessions',
-  shelves: () => 'shelves',
+  // shelves: () => 'shelves',
   history: () => 'history',
   clips: () => 'clips',
   tags: () => 'tags',
@@ -23,10 +23,14 @@ export const storageKeys = {
   collections: () => 'collections',
 
   /** User ↔ Book relationship (Library) */
-  userBooks: () => 'userBooks',
+  userBooks: (userId: string) => `userBooks:${userId}`,
+shelves: (userId: string) => `user:${userId}:shelves`,
+
 
   /** Shelf projections (expressions) */
-  shelfInstances: () => 'shelfInstances',
+  shelfInstances: (userId: string) =>
+  `user:${userId}:shelfInstances`,
+
 
   // ─────────────────────────────
   // OPTIONAL: single-entity helpers

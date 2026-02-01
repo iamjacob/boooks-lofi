@@ -1,243 +1,218 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { ID } from "@/core/ids/id";
+import { Shelf } from "@/core/models/shelf";
+import { BookListItem } from "@/ui/models/bookListItem";
 import { LibraryHeader } from "@/ui/components/library/LibraryHeader";
 import { LibraryContent } from "@/ui/components/library/LibraryContent";
-import { BookEditor } from "@/ui/components/library/BookEditor";
-import { BookListItem } from "@/ui/models/bookListItem";
-import { UserBook } from "@/core/models/userBook";
-import { Shelf } from "@/core/models/shelf";
+import { loadShelves, loadUserBooks } from "@/core/db/libraryDb";
 import {
-  loadBooks,
-  loadUserBooks,
-  saveBook,
-  saveUserBook,
-  loadShelves,
-  loadCollections,
-} from "@/core/db/libraryDb";
+  loadLibraryRows,
+  addToLibrary,
+  LibraryRow,
+} from "@/core/library/libraryCrud";
 import { getLocalUserByUsername } from "@/core/users/getLocalUser";
-import { collectionExists } from "@/core/collections/collectionsExists";
-import { ID } from "@/core/ids/id";
-import { ShelfSwitcher } from "@/ui/components/library/ShelfSwitcher";
-import { CollectionSwitcher } from "@/ui/components/library/CollectionSwitcher";
-import { LibraryModeSwitcher } from "@/ui/components/library/LibraryModeSwitcher";
-import { SortSwitcher } from "@/ui/components/library/SortSwitcher";
 
-/* ---------------- TYPES ---------------- */
-
-type LibraryShellProps = {
-  username: string;
-  shelf: string;
-  collection: string | null;
+type Props = {
+  username: string; // handle from url (already stripped of @ typically)
+  shelf: string; // "library" | "default" | "home" | slug
 };
 
 type ViewState =
-  | "loading-user"
-  | "user-not-found"
-  | "user-private"
-  | "shelf-not-found"
-  | "collection-not-found"
-  | "ready";
+  | { kind: "loading" }
+  | { kind: "user-not-found"; handle: string }
+  | { kind: "user-private"; handle: string }
+  | {
+      kind: "ready";
+      handle: string;
+      userId: ID;
+      shelves: Shelf[];
+      mode: "library" | "shelf";
+      activeShelf: Shelf | null; // resolved shelf object (home/slug)
+      rows: LibraryRow[]; // what we render right now
+    };
 
+export default function LibraryShell({ username, shelf }: Props) {
+  const [state, setState] = useState<ViewState>({ kind: "loading" });
 
-type SortMode = "title" | "status" | "added";
+  const mode = useMemo<"library" | "shelf">(
+    () => (shelf === "library" ? "library" : "shelf"),
+    [shelf]
+  );
 
-/* ---------------- COMPONENT ---------------- */
+  const isHome = shelf === "default" || shelf === "home" || !shelf;
 
-export function LibraryShell({
-  username,
-  shelf,
-  collection,
-}: LibraryShellProps) {
-  const [viewState, setViewState] = useState<ViewState>("loading-user");
+  async function reload(userId: ID, next: Partial<Extract<ViewState, { kind: "ready" }>> = {}) {
+    const rows = await loadLibraryRows(userId);
 
-  const [allBooks, setAllBooks] = useState<BookListItem[]>([]);
-  const [userBooks, setUserBooks] = useState<UserBook[]>([]);
-  const [editing, setEditing] = useState<BookListItem | null>(null);
+    setState((prev) => {
+      if (prev.kind !== "ready") return prev;
+      return {
+        ...prev,
+        rows,
+        ...next,
+      };
+    });
+  }
 
-  const [userId, setUserId] = useState<ID | null>(null);
-  const [resolvedShelfId, setResolvedShelfId] = useState<ID | null>(null);
+  async function handleAddBook() {
+    if (state.kind !== "ready") return;
 
-  const [shelves, setShelves] = useState<Shelf[]>([]);
-  const [collections, setCollections] = useState<
-    { id: string; title: string }[]
-  >([]);
-const [sortMode, setSortMode] = useState<SortMode>("title");
+    const title = prompt("Book title?");
+    if (!title) return;
 
+    const book: BookListItem = {
+      id: crypto.randomUUID(),
+      title,
+      authorName: "",
+    };
 
+    console.log("📚 ADD: addToLibrary()", {
+      userId: state.userId,
+      title: book.title,
+      routeShelf: shelf,
+      mode: state.mode,
+      isHome,
+    });
 
-  
-  /* -------- CONTEXT RESOLUTION (URL → DOMAIN) -------- */
+    // 1) ALWAYS add to library
+    await addToLibrary(state.userId, book);
+
+    // 2) reload rows (source of truth)
+    await reload(state.userId);
+
+    // 3) If we are on home/default → we want a ShelfInstance later.
+    // We DON'T implement ShelfInstances here yet, but we log stub clearly.
+    if (isHome) {
+      const userBooks = await loadUserBooks(state.userId);
+      const ub = userBooks.find((x) => x.bookId === book.id);
+
+      console.log("📐 HOME CONTEXT: would create ShelfInstance", {
+        route: `/@${state.handle}`,
+        intendedShelf: state.activeShelf?.id ?? "unknown",
+        bookId: book.id,
+        resolvedUserBookId: ub?.id ?? null,
+      });
+
+      if (!ub) {
+        console.log(
+          "🧱 STUB BLOCKED: could not find UserBook for new bookId (cannot create ShelfInstance yet)",
+          { bookId: book.id }
+        );
+      } else {
+        console.log(
+          "🧱 STUB: create ShelfInstance(userBookId, shelfId, position, rotation) not implemented yet",
+          { userBookId: ub.id, shelfId: state.activeShelf?.id }
+        );
+      }
+    }
+  }
+
   useEffect(() => {
     let cancelled = false;
 
-    async function resolveContext() {
-      setViewState("loading-user");
+    async function boot() {
+      setState({ kind: "loading" });
 
       const user = await getLocalUserByUsername(username);
+
       if (!user) {
-        setViewState("user-not-found");
+        if (!cancelled) {
+          setState({ kind: "user-not-found", handle: username });
+        }
         return;
       }
 
       if (user.mode === "private") {
-        setViewState("user-private");
+        if (!cancelled) {
+          setState({ kind: "user-private", handle: user.handle ?? username });
+        }
         return;
       }
 
-      const allShelves = await loadShelves(user.id);
-      setShelves(allShelves);
+      const userShelves = await loadShelves(user.id);
 
-      let resolvedShelf: Shelf | undefined;
+      // Resolve active shelf object (only relevant in shelf-mode)
+      let activeShelf: Shelf | null = null;
 
-      if (shelf === "default") {
-        resolvedShelf = allShelves.find(
-          (s) => s.id === user.defaultShelfId
-        );
-      } else {
-        resolvedShelf = allShelves.find((s) => s.slug === shelf);
-      }
+      if (mode === "shelf") {
+        if (isHome) {
+          activeShelf =
+            userShelves.find((s) => s.id === user.defaultShelfId) ?? null;
+        } else {
+          activeShelf = userShelves.find((s) => s.slug === shelf) ?? null;
+        }
 
-      if (!resolvedShelf) {
-        setViewState("shelf-not-found");
-        return;
-      }
-
-      const shelfCollections = await loadCollections(
-        user.id,
-        resolvedShelf.id
-      );
-      setCollections(shelfCollections);
-
-      if (collection) {
-        const ok = await collectionExists(
-          user.id,
-          resolvedShelf.id,
-          collection
-        );
-        if (!ok) {
-          setViewState("collection-not-found");
-          return;
+        // If shelf slug doesn't exist, we still keep shell alive,
+        // but we show a soft message in UI (not a hard crash)
+        if (!activeShelf) {
+          console.log("⚠️ SHELF NOT FOUND (soft)", {
+            userId: user.id,
+            shelfParam: shelf,
+            isHome,
+            defaultShelfId: user.defaultShelfId,
+            shelves: userShelves.map((s) => ({ id: s.id, slug: s.slug, title: s.title })),
+          });
         }
       }
 
-      if (!cancelled) {
-        setUserId(user.id);
-        setResolvedShelfId(resolvedShelf.id);
-        setViewState("ready");
-      }
+      const rows = await loadLibraryRows(user.id);
+
+      if (cancelled) return;
+
+      setState({
+        kind: "ready",
+        handle: user.handle ?? username,
+        userId: user.id,
+        shelves: userShelves,
+        mode,
+        activeShelf,
+        rows: rows,
+      });
     }
 
-    resolveContext();
+    boot();
     return () => {
       cancelled = true;
     };
-  }, [username, shelf, collection]);
+  }, [username, shelf, mode, isHome]);
 
-  /* -------- LOAD DATA -------- */
-  useEffect(() => {
-    if (viewState !== "ready" || !userId || !resolvedShelfId) return;
+  // ---------------- RENDER ----------------
 
-    const uid = userId;
-
-    async function load() {
-      const books = await loadBooks();
-      const userBooks = await loadUserBooks(uid);
-
-      const filteredUserBooks = userBooks.filter(
-        (ub) => ub.shelfId === resolvedShelfId
-      );
-
-      setAllBooks(books);
-      setUserBooks(filteredUserBooks);
-    }
-
-    load();
-  }, [viewState, userId, resolvedShelfId]);
-
-  /* -------- DERIVED VIEW (THE ONLY LIST UI MAY USE) -------- */
-  const visibleItems = userBooks
-    .map((ub) => {
-      const book = allBooks.find((b) => b.id === ub.bookId);
-      if (!book) return null;
-
-      return {
-        ...book,
-        userBookId: ub.id,
-        readingStatus: ub.readingStatus,
-        shelfId: ub.shelfId,
-        syncState: ub.syncState,
-      };
-    })
-    .filter(Boolean) as Array<
-      BookListItem & {
-        userBookId: ID;
-        readingStatus: UserBook["readingStatus"];
-        shelfId: ID;
-        syncState?: UserBook["syncState"];
-      }
-    >;
-
-  /* -------- ADD -------- */
-  function addBook() {
-    setEditing({
-      id: crypto.randomUUID(),
-      title: "",
-      authorName: "",
-    });
+  if (state.kind === "loading") {
+    return <div style={{ padding: 24 }}>Loading…</div>;
   }
 
-  /* -------- SAVE -------- */
-  async function saveBookAndUser(book: BookListItem) {
-    setAllBooks((prev) =>
-      prev.some((b) => b.id === book.id)
-        ? prev.map((b) => (b.id === book.id ? book : b))
-        : [...prev, book]
-    );
-
-    await saveBook(book);
-
-    setUserBooks((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        userId: userId!,
-        bookId: book.id,
-        shelfId: resolvedShelfId!,
-        readingStatus: "unread",
-        syncState: "pending",
-        createdAt: Date.now(),
-      },
-    ]);
-
-    setEditing(null);
-  }
-
-  /* -------- VIEW STATES -------- */
-  if (viewState !== "ready") {
-    const msg =
-      viewState === "user-not-found"
-        ? "User does not exist."
-        : viewState === "user-private"
-        ? "This library is private."
-        : viewState === "shelf-not-found"
-        ? "Shelf does not exist."
-        : viewState === "collection-not-found"
-        ? "Collection does not exist."
-        : "Loading…";
-
+  if (state.kind === "user-not-found") {
     return (
       <div style={{ padding: 24 }}>
-        <h1>@{username}</h1>
-        <p>{msg}</p>
+        <h1 style={{ margin: 0 }}>@{state.handle}</h1>
+        <p style={{ opacity: 0.8 }}>User does not exist.</p>
       </div>
     );
   }
 
+  if (state.kind === "user-private") {
+    return (
+      <div style={{ padding: 24 }}>
+        <h1 style={{ margin: 0 }}>@{state.handle}</h1>
+        <p style={{ opacity: 0.8 }}>This profile is private.</p>
+      </div>
+    );
+  }
 
-  /* -------- MAIN UI -------- */
-  const activeShelfSlug = shelf === "default" ? "home" : shelf;
-const isLibraryView = shelf === "library";
+  // READY
+  const title =
+    state.mode === "library"
+      ? "Library"
+      : state.activeShelf
+      ? state.activeShelf.title
+      : isHome
+      ? "Home (missing default shelf)"
+      : `Unknown shelf (${shelf})`;
+
+  const rows = state.rows;
 
   return (
     <div className="h-full flex flex-col">
@@ -246,51 +221,47 @@ const isLibraryView = shelf === "library";
           padding: 24,
           borderBottom: "1px solid #333",
           display: "flex",
-          gap: 24,
+          gap: 16,
+          alignItems: "baseline",
+          flexWrap: "wrap",
         }}
       >
-        <h1>@{username}</h1>
-        <p>Shelf: <strong>{activeShelfSlug}</strong></p>
-        <p>Collection: <strong>{collection ?? "—"}</strong></p>
+        <h1 style={{ margin: 0 }}>@{state.handle}</h1>
+        <span style={{ opacity: 0.7 }}>{title}</span>
+        <span style={{ opacity: 0.5 }}>
+          {rows.length === 0 ? "0 books" : `${rows.length} books`}
+        </span>
       </div>
 
-      <ShelfSwitcher
-        username={username}
-        shelves={shelves}
-        activeShelfSlug={activeShelfSlug}
-      />
+      {/* Add button is always allowed here because phase 1 is private/self flow. */}
+      <LibraryHeader onAddBook={handleAddBook} />
 
-      <CollectionSwitcher
-        username={username}
-        shelfSlug={activeShelfSlug}
-        collections={collections}
-        activeCollection={collection}
-      />
+      {state.mode === "shelf" && !state.activeShelf ? (
+        <div style={{ padding: 24, opacity: 0.8 }}>
+          <p style={{ marginTop: 0 }}>
+            This shelf does not exist yet.
+          </p>
+          <p style={{ marginBottom: 0, opacity: 0.7 }}>
+            (We keep the shell alive so you can still add books and debug.)
+          </p>
+        </div>
+      ) : null}
 
-<LibraryModeSwitcher
-  username={username}
-  activeMode={isLibraryView ? "library" : "shelf"}
-  shelfSlug={activeShelfSlug}
-/>
+      {rows.length === 0 ? (
+        <div style={{ padding: 24, opacity: 0.8 }}>
+          <p style={{ marginTop: 0 }}>
+            {state.mode === "library"
+              ? "Your library is empty. Add your first book."
+              : "No books here yet. (ShelfInstances coming next.)"}
+          </p>
 
-<SortSwitcher value={sortMode} onChange={setSortMode} />
-
-      <LibraryHeader onAddBook={addBook} />
-
-      <LibraryContent
-        books={visibleItems}
-        onSelectBook={(id) => {
-          const b = visibleItems.find((x) => x.id === id);
-          if (b) setEditing(b);
-        }}
-        onSetReadingStatus={() => {}}
-      />
-
-      {editing && (
-        <BookEditor
-          book={editing}
-          onSave={saveBookAndUser}
-          onCancel={() => setEditing(null)}
+          <button onClick={handleAddBook}>Add book</button>
+        </div>
+      ) : (
+        <LibraryContent
+          books={rows}
+          onSelectBook={() => {}}
+          onSetReadingStatus={() => {}}
         />
       )}
     </div>

@@ -20,7 +20,7 @@ import { LibraryPanel } from '@/ui/panels/LibraryPanel'
 import ShelfView from '@/ui/panels/ShelfViewPanel';
 
 import { useParams } from 'next/navigation';
-import { LibraryShell } from '@/ui/shells/LibraryShell';
+import LibraryShell from '@/ui/shells/LibraryShell';
 
 export default function ClientApp() {
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
@@ -33,7 +33,7 @@ const params = useParams();
       <LibraryShell
         username={String(params.username)}
         shelf={String(params.shelf ?? 'default')}
-        collection={params.collection ? String(params.collection) : null}
+        // collection={params.collection ? String(params.collection) : null}
       />
     );
   }

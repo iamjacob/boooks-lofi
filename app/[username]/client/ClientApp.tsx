@@ -1,6 +1,6 @@
 "use client";
 
-import { LibraryShell } from "@/ui/shells/LibraryShell";
+import LibraryShell from "@/ui/shells/LibraryShell";
 import { decodeUsernameFromUrl } from "@/core/routing/username";
 import { userExistsOffline } from "@/core/users/userExists";
 
@@ -30,7 +30,7 @@ export default function ClientApp({
     <LibraryShell
       username={username}   // ← ALT HERFRA ER "jacob"
       shelf={shelf}
-      collection={collection}
+      // collection={collection}
     />
   );
 }
