@@ -19,6 +19,9 @@ export interface Collection {
     languages?: string[];
   };
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

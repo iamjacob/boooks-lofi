@@ -13,7 +13,8 @@ import {
   LibraryRow,
 } from "@/core/library/libraryCrud";
 import { getLocalUserByUsername } from "@/core/users/getLocalUser";
-
+import ShelfSwitcher from "@/ui/components/library/ShelfSwitcher";
+import { saveOnShelf } from "@/core/shelves/saveOnShelf";
 type Props = {
   username: string; // handle from url (already stripped of @ typically)
   shelf: string; // "library" | "default" | "home" | slug
@@ -105,6 +106,12 @@ export default function LibraryShell({ username, shelf }: Props) {
           "🧱 STUB: create ShelfInstance(userBookId, shelfId, position, rotation) not implemented yet",
           { userBookId: ub.id, shelfId: state.activeShelf?.id }
         );
+                  await saveOnShelf(
+  state.userId,
+  ub.id,
+  state.activeShelf?.id!
+);
+
       }
     }
   }
@@ -214,6 +221,13 @@ export default function LibraryShell({ username, shelf }: Props) {
 
   const rows = state.rows;
 
+const activeShelfSlug =
+  shelf === "library"
+    ? "library"
+    : isHome
+    ? "home"
+    : state.activeShelf?.slug ?? "unknown";
+
   return (
     <div className="h-full flex flex-col">
       <div
@@ -235,7 +249,11 @@ export default function LibraryShell({ username, shelf }: Props) {
 
       {/* Add button is always allowed here because phase 1 is private/self flow. */}
       <LibraryHeader onAddBook={handleAddBook} />
-
+<ShelfSwitcher
+  username={state.handle}
+  shelves={state.shelves}
+  activeShelfSlug={activeShelfSlug}
+/>
       {state.mode === "shelf" && !state.activeShelf ? (
         <div style={{ padding: 24, opacity: 0.8 }}>
           <p style={{ marginTop: 0 }}>

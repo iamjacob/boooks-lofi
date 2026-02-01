@@ -55,6 +55,9 @@ export interface Artifact {
     txHash?: string;
   };
 
+  isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

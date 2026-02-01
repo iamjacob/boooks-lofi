@@ -27,7 +27,9 @@ export interface User {
   readingLanguages?: string[]; // ['en', 'da']
 
   defaultShelfId: ID;
-  
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

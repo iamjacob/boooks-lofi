@@ -16,6 +16,9 @@ export interface TGD {
   /** Optional evolution */
   parentId?: ID; // previous version
 
+  isSynced:boolean;
+  lastSyncedAt?: number;
+
   /** Lifecycle */
   createdAt: number;
   updatedAt?: number;

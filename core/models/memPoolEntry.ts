@@ -54,6 +54,9 @@ export interface MempoolEntry {
     down: number;
   };
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

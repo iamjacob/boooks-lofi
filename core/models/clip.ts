@@ -33,6 +33,9 @@ export interface Clip {
   /** Ownership */
   createdBy: ID; // userId
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

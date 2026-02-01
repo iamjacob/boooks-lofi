@@ -55,6 +55,12 @@ export type BookImageVariant = {
     dominantColors?: string[];
     isBlurry?: boolean;
   };
+  
+  isSynced:boolean;
+  lastSyncedAt?: number;
+
+  createdAt: number;
+  updatedAt?: number;
 };
 
 /**
@@ -72,6 +78,10 @@ export type BookImageRoleEntry = {
   /** Preferred default size for UI */
   preferredSize?: ImageSize;
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
+  createdAt: number;
   updatedAt?: number;
 };
 
@@ -82,6 +92,10 @@ export type BookImageSet = {
   id: string;
   roles: Partial<Record<BookImageRole, BookImageRoleEntry>>;
 
+    isSynced:boolean;
+
+  createdAt: number;
+  updatedAt?: number;
   lastSyncedAt?: number;
   version?: number;
 };

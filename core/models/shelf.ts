@@ -18,6 +18,9 @@ export interface Shelf {
   };
   
   books?: number; // 👈 derived count, NOT required
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

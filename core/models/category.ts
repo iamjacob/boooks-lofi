@@ -15,6 +15,9 @@ export interface Category {
   icon?: string;
 
   /** System */
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

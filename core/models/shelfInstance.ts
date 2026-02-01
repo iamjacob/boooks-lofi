@@ -9,10 +9,11 @@ import { ID } from '@/core/ids/id';
  */
 export interface ShelfInstance {
   id: ID;
-
   userBookId: ID;
   shelfId: ID;
 
+  index?: number;
+  
   /** Spatial projection */
   position: [number, number, number];
   rotation: [number, number, number];
@@ -28,6 +29,9 @@ export interface ShelfInstance {
 
   /** Mempool state */
   state?: 'local' | 'pending' | 'published';
+
+    isSynced:boolean;
+  lastSyncedAt?: number;
 
   createdAt: number;
   updatedAt?: number;

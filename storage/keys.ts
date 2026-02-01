@@ -24,12 +24,8 @@ export const storageKeys = {
 
   /** User ↔ Book relationship (Library) */
   userBooks: (userId: string) => `userBooks:${userId}`,
-shelves: (userId: string) => `user:${userId}:shelves`,
-
-
-  /** Shelf projections (expressions) */
-  shelfInstances: (userId: string) =>
-  `user:${userId}:shelfInstances`,
+  shelves: (userId: string) => `user:${userId}:shelves`,
+  shelfInstances: (userId: string) => `user:${userId}:shelfInstances`,
 
 
   // ─────────────────────────────

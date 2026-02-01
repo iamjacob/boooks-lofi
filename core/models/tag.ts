@@ -16,5 +16,8 @@ export interface Tag {
   /** Optional grouping */
   categoryId?: ID;
 
+  isSynced:boolean;
+  lastSyncedAt?: number;
+  updatedAt?: number;
   createdAt: number;
 }

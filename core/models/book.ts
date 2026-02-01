@@ -34,6 +34,10 @@ export interface Book {
 
   /** Lifecycle */
   state: BookState;
+  
+  isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

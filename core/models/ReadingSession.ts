@@ -10,6 +10,9 @@ export type ReadingSession = {
 
   durationMs?: number;
 
+
+  createdAt: number;
+  updatedAt?: number;
   isSynced: boolean;
   lastSyncedAt?: number;
 };

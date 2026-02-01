@@ -23,6 +23,10 @@ export interface BookAsset {
 
   checksum?: string;
   sizeBytes?: number;
+  
+  isSynced:boolean;
+  lastSyncedAt?: number;
 
   createdAt: number;
+  updatedAt?: number;
 }

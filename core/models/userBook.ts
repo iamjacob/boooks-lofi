@@ -39,6 +39,15 @@ export interface UserBook {
     tokenId?: string;
   };
 
+    /** Declarative filter (books are NOT owned by collections) */
+  filter?: {
+    tagIds?: ID[];
+    authors?: string[];
+    languages?: string[];
+  };
+  isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

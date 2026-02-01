@@ -48,6 +48,9 @@ export interface Job {
   retries: number;
   lastError?: string;
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

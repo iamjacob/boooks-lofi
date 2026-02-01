@@ -6,6 +6,10 @@ export interface Author {
 
   bio?: string;
   avatarUrl?: string;
+  
+  isSynced:boolean;
+  lastSyncedAt?: number;
 
   createdAt: number;
+  updatedAt?: number;
 }

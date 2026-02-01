@@ -24,6 +24,9 @@ export interface Verification {
     value: string;       // hash / signature / reference
   };
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   createdAt: number;
   updatedAt?: number;
 }

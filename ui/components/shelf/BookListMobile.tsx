@@ -8,6 +8,7 @@ import { ResolvedImage } from "@/ui/components/images/ResolvedImage";
 type Props = {
   books: BookListItem[];
   onSelect?: (id: ID) => void;
+  onSaveOnShelf?: any;
 };
 
 export function BookListMobile({ books, onSelect }: Props) {

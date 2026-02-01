@@ -1,45 +1,61 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Shelf } from "@/core/models/shelf";
+import { useRouter } from "next/navigation";
 
 type Props = {
-  username: string;          // 👈 DEN MANGLEDE
+  username: string;
   shelves: Shelf[];
-  activeShelfSlug: string;
+  activeShelfSlug: string; // "library" | "home" | slug
 };
 
-export function ShelfSwitcher({
+export default function ShelfSwitcher({
   username,
   shelves,
   activeShelfSlug,
 }: Props) {
   const router = useRouter();
 
-  function goToShelf(slug: string) {
-    router.push(`/@${username}/${slug}`);
-  }
-
   return (
-    <div className="flex gap-2 overflow-x-auto p-2">
-      {shelves.map((shelf) => {
-        const isActive = shelf.slug === activeShelfSlug;
+    <div className="flex gap-2 px-4 py-2 border-b border-neutral-800 overflow-x-auto">
+      {/* Library (NOT a shelf) */}
+      <button
+        onClick={() => router.push(`/@${username}/library`)}
+        className={`px-3 py-1 text-xs rounded ${
+          activeShelfSlug === "library"
+            ? "bg-white text-black"
+            : "bg-neutral-800 text-neutral-300"
+        }`}
+      >
+        Library
+      </button>
 
-        return (
-          <button
-            key={shelf.id}
-            onClick={() => goToShelf(shelf.slug)}
-            className={`px-3 py-1 rounded-full text-sm whitespace-nowrap
-              ${
-                isActive
-                  ? "bg-white text-black"
-                  : "bg-neutral-800 text-neutral-300"
-              }`}
-          >
-            {shelf.title}
-          </button>
-        );
-      })}
+      {/* Home / Default */}
+      <button
+        onClick={() => router.push(`/@${username}`)}
+        className={`px-3 py-1 text-xs rounded ${
+          activeShelfSlug === "home"
+            ? "bg-white text-black"
+            : "bg-neutral-800 text-neutral-300"
+        }`}
+      >
+        Home
+      </button>
+
+      {/* User shelves */}
+      {shelves.map((shelf) => (
+        <button
+          key={shelf.id}
+          onClick={() => router.push(`/@${username}/${shelf.slug}`)}
+          className={`px-3 py-1 text-xs rounded ${
+            activeShelfSlug === shelf.slug
+              ? "bg-white text-black"
+              : "bg-neutral-800 text-neutral-300"
+          }`}
+        >
+          {shelf.title}
+        </button>
+      ))}
     </div>
   );
 }

@@ -9,6 +9,9 @@ export interface Session {
 
   status: 'active' | 'revoked';
 
+    isSynced:boolean;
+  lastSyncedAt?: number;
+
   // unlockedAt: number; ?? 
   createdAt: number;
   revokedAt?: number;
