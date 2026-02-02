@@ -1,11 +1,10 @@
 import { Book } from '@/core/models/book';
-import { ID } from '@/core/ids/id';
+import { BookID } from '@/core/ids/id';
 
 export interface BookRepository {
+  get(id: BookID): Promise<Book | undefined>;
+  getAll(): Promise<Book[]>;
   insert(book: Book): Promise<void>;
   update(book: Book): Promise<void>;
-  delete(id: ID): Promise<void>;
-
-  get(id: ID): Promise<Book | undefined>;
-  getAll(): Promise<Book[]>;
+  delete(id: BookID): Promise<void>;
 }

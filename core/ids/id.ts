@@ -14,7 +14,7 @@ export type CategoryID = Brand<string, 'CategoryID'>;
 export type TagID = Brand<string, 'TagID'>;
 export type AssetID = Brand<string, 'AssetID'>;
 export type ShelfInstanceID = Brand<string, 'ShelfInstanceID'>;
-export type libraryGroupID = Brand<string, 'libraryGroupID'>;
+export type LibraryGroupID = Brand<string, 'LibraryGroupID'>;
 
 /**
  * Generate a lexicographically sortable, offline-safe ID (ULID-like).

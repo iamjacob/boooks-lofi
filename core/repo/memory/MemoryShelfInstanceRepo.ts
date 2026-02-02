@@ -26,6 +26,10 @@ export class MemoryShelfInstanceRepo {
     );
   }
 
+  async getAll() {
+  return Array.from(this.instances.values());
+}
+
   async getByShelf(shelfId: string) {
     return Array.from(this.instances.values()).filter(
       i => i.shelfId === shelfId

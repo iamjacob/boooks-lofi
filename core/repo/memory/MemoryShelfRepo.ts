@@ -1,5 +1,5 @@
 import { Shelf } from '@/core/models/shelf';
-import { ShelfID } from '@/core/ids/id';
+import { ShelfID, UserID } from '@/core/ids/id';
 
 export class MemoryShelfRepo {
   private shelves = new Map<ShelfID, Shelf>();
@@ -23,4 +23,11 @@ export class MemoryShelfRepo {
   async delete(id: ShelfID) {
     this.shelves.delete(id);
   }
+
+  async getByOwner(userId: UserID) {
+  return Array.from(this.shelves.values()).filter(
+    s => s.ownerId === userId
+  );
+}
+
 }

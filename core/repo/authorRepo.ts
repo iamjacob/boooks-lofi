@@ -1,7 +1,7 @@
 import { Author } from '@/core/models/author';
-import { ID } from '@/core/ids/id';
+import { AuthorID } from '@/core/ids/id';
 
-const authors = new Map<ID, Author>();
+const authors = new Map<AuthorID, Author>();
 
 export const authorRepo = {
   insert(author: Author) {
@@ -13,7 +13,7 @@ export const authorRepo = {
   getAll(): Author[] {
     return Array.from(authors.values());
   },
-  get(id: ID) {
+  get(id: AuthorID) {
     return authors.get(id);
   },
 };

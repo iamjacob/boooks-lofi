@@ -4,7 +4,9 @@ export interface Shelf {
   id: ShelfID;
 
   // ownerId: UserID;
-  userId: UserID;
+  // userId?: UserID;
+  ownerId: UserID;
+
 
   title: string;
   slug: string; // 👈 REQUIRED for routing

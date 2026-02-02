@@ -5,4 +5,5 @@ export interface UserRepository {
   get(id: UserID): Promise<User | undefined>;
   getAll(): Promise<User[]>;
   insert(user: User): Promise<void>;
+  update(user: User): Promise<void>;
 }

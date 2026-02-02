@@ -1,11 +1,10 @@
 import { Author } from '@/core/models/author';
-import { ID } from '@/core/ids/id';
+import { AuthorID } from '@/core/ids/id';
 
 export interface AuthorRepository {
+  get(id: AuthorID): Promise<Author | undefined>;
+  getAll(): Promise<Author[]>;
   insert(author: Author): Promise<void>;
   update(author: Author): Promise<void>;
-  delete(id: ID): Promise<void>;
-
-  get(id: ID): Promise<Author | undefined>;
-  getAll(): Promise<Author[]>;
+  delete(id: AuthorID): Promise<void>;
 }

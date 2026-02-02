@@ -2,3 +2,8 @@ export * from './addBookToUserLibrary';
 export * from './ensureBookAndAddToLibrary';
 export * from './removeBookFromUserLibrary';
 export * from './placeUserBookOnShelf';
+export * from './removeUserBook';
+export * from './createDefaultShelfForUser';
+export * from './deleteShelfWithInstances';
+export * from './createShelf';
+export * from './updateShelf';

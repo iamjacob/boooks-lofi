@@ -22,7 +22,7 @@ export async function placeUserBookOnShelf(
   }
 
   // Ownership guard
-  if (shelf.userId !== userBook.userId) {
+  if (shelf.ownerId !== userBook.userId) {
     throw new Error('Cannot place book on another user’s shelf');
   }
 
