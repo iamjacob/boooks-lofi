@@ -1,5 +1,5 @@
-dev/
-└─ crud-test.html
+test/
+└─ page.tsx
 
 core/
 └─ crud/
@@ -69,6 +69,35 @@ core/
    ├─ moveBookBetweenShelves.ts
    ├─ addBookToCollection.ts
    └─ …
+
+
+sync/
+├─ scanLocalChanges.ts     // find entities where isSynced === false
+├─ pushToCloud.ts          // send local changes to backend
+├─ pullFromCloud.ts        // fetch remote changes
+├─ reconcile.ts            // merge local + remote (eventual)
+├─ markAsSynced.ts         // update flags after success
+├─ heartbeat.ts            // device/session liveness
+├─ syncQueue.ts            // optional: retry / backoff
+└─ syncStatus.ts           // derive UI-friendly sync state
+
+backend/
+├─ devices/
+│  ├─ registerDevice
+│  ├─ updateLastSeen
+│  └─ listDevices
+│
+├─ sessions/
+│  ├─ createSession
+│  ├─ listSessions
+│  └─ revokeSession
+
+sync/
+└─ subscriptions/
+   ├─ subscribeToShelf
+   ├─ cacheShelfReadOnly
+   └─ revokeSubscription
+
 
 
 
