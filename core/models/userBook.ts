@@ -1,14 +1,25 @@
 import { ID } from "@/core/ids/id";
 
-/**
- * UserBook = a user's canonical relationship to a book.
- *
- * INVARIANTS:
- * - Exactly ONE UserBook per user per book
- * - UserBook always belongs to EXACTLY ONE shelf
- * - Shelves NEVER own books (they are just contexts)
- */
-export type ReadingStatus = "unread" | "reading" | "finished";
+export type ReadingStatus =
+  | "inspiration"
+  | "unread"
+  | "reading"
+  | "finished"
+  | "paused"
+  | "abandoned";
+
+export type OwnershipStatus =
+  | "owned"        // jeg ejer den fysisk/digitalt
+  | "borrowed"     // jeg har lånt den
+  | "lent"         // jeg har lånt den ud
+  | "needed"       // jeg mangler adgang (fx skolebog)
+  | "none";        // ingen fysisk relation
+
+  export type IntentStatus =
+  | "wish"   // jeg vil gerne læse den (Your active intent)
+  | "advocate"  // jeg ønsker andre læser den (You promote/recommend it)
+  | "bestow"    // jeg vil give den væk fysisk (To present as a gift)
+  | "acquire";  // jeg ønsker en anden giver/låner mig den (To seek/obtain)
 
 export interface UserBook {
   id: ID;
@@ -17,13 +28,17 @@ export interface UserBook {
   userId: ID;
   bookId: ID;
 
-  /** Canonical shelf placement */
-  shelfId?: ID;
-
   /** Personal state */
   readingStatus: ReadingStatus;
+  ownershipStatus?: OwnershipStatus;
+  intentStatus?: IntentStatus;
+
+  // Library-only grouping (NOT a movable group)
+  libraryGroupId?: ID; // fx "harry-potter-series"
+
+
   tagIds?: ID[];
-  syncState?: "local" | "pending" | "synced" | "error";
+  syncState: "local" | "pending" | "synced" | "error";
 
   /** Optional 3D placement (future) */
   libraryPlacement?: {
@@ -39,15 +54,11 @@ export interface UserBook {
     tokenId?: string;
   };
 
-    /** Declarative filter (books are NOT owned by collections) */
-  filter?: {
-    tagIds?: ID[];
-    authors?: string[];
-    languages?: string[];
-  };
+  commitState?: "draft" | "pending" | "committed";
+ //something to auto update/append to mempool
+
   isSynced:boolean;
   lastSyncedAt?: number;
-
   createdAt: number;
   updatedAt?: number;
 }

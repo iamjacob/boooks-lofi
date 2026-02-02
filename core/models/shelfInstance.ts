@@ -14,9 +14,13 @@ export interface ShelfInstance {
 
   index?: number;
   
-  /** Spatial projection */
-  position: [number, number, number];
-  rotation: [number, number, number];
+  // Group membership (optional)
+  shelfGroupId?: ID;
+
+  // Individual transform (relative to group if grouped)
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+
 
   /** Contextual meaning */
   notes?: string;
@@ -30,7 +34,7 @@ export interface ShelfInstance {
   /** Mempool state */
   state?: 'local' | 'pending' | 'published';
 
-    isSynced:boolean;
+  isSynced:boolean;
   lastSyncedAt?: number;
 
   createdAt: number;
