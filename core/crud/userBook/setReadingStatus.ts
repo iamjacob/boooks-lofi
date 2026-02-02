@@ -1,9 +1,9 @@
 import { userBookRepo } from '@/core/repo';
 import { ReadingStatus } from '@/core/models/userBook';
-import { ID } from '@/core/ids/id';
+import { ID, UserBookID } from '@/core/ids/id';
 
 export async function setReadingStatus(
-  userBookId: ID,
+  userBookId: UserBookID,
   status: ReadingStatus
 ) {
   const ub = await userBookRepo.get(userBookId);

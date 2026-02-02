@@ -1,10 +1,10 @@
 import { UserBook } from '@/core/models/userBook';
 import { userBookRepo } from '@/core/repo';
-import { createId } from './../../ids/id'
+import { BookID, createId, UserID } from '@/core/ids/id'
 
 export async function createUserBook(input: {
-  userId: string;
-  bookId: string;
+  userId: UserID;
+  bookId: BookID;
 }): Promise<UserBook> {
   const now = Date.now();
 
@@ -16,7 +16,7 @@ export async function createUserBook(input: {
     createdAt: now,
     updatedAt: now,
     isSynced: false,
-    syncState:"pending",//maybe
+    syncState:"pending" as const,//maybe
   };
 
   await userBookRepo.insert(userBook);

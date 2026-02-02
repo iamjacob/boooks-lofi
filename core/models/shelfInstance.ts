@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { ShelfInstanceID, UserBookID, ShelfID, ShelfGroupID, TagID } from '@/core/ids/id';
 
 /**
  * ShelfInstance = a contextual expression of a UserBook.
@@ -8,14 +8,14 @@ import { ID } from '@/core/ids/id';
  * THIS can go to mempool.
  */
 export interface ShelfInstance {
-  id: ID;
-  userBookId: ID;
-  shelfId: ID;
+  id: ShelfInstanceID;
+  userBookId: UserBookID;
+  shelfId: ShelfID;
 
   index?: number;
   
   // Group membership (optional)
-  shelfGroupId?: ID;
+  shelfGroupId?: ShelfGroupID;
 
   // Individual transform (relative to group if grouped)
   position?: [number, number, number];
@@ -25,11 +25,11 @@ export interface ShelfInstance {
   /** Contextual meaning */
   notes?: string;
   rating?: number;
-  tagIds?: ID[];
+  tagIds?: TagID[];
 
   /** Social layer */
   visibility?: 'private' | 'public';
-  commentThreadId?: ID;
+  // commentThreadId?: ID;
 
   /** Mempool state */
   state?: 'local' | 'pending' | 'published';

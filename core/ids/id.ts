@@ -9,10 +9,12 @@ export type AuthorID = Brand<string, 'AuthorID'>;
 export type UserID = Brand<string, 'UserID'>;
 export type UserBookID = Brand<string, 'UserBookID'>;
 export type ShelfID = Brand<string, 'ShelfID'>;
+export type ShelfGroupID = Brand<string, 'ShelfGroupID'>;
 export type CategoryID = Brand<string, 'CategoryID'>;
 export type TagID = Brand<string, 'TagID'>;
 export type AssetID = Brand<string, 'AssetID'>;
-
+export type ShelfInstanceID = Brand<string, 'ShelfInstanceID'>;
+export type libraryGroupID = Brand<string, 'libraryGroupID'>;
 
 /**
  * Generate a lexicographically sortable, offline-safe ID (ULID-like).

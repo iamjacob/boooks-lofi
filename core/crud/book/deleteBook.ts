@@ -1,6 +1,6 @@
 import { bookRepo } from '@/core/repo';
-import { ID } from '@/core/ids/id';
+import { BookID } from '@/core/ids/id';
 
-export async function deleteBook(id: ID): Promise<void> {
+export async function deleteBook(id: BookID): Promise<void> {
   await bookRepo.delete(id);
 }

@@ -1,4 +1,4 @@
-import { ID } from "@/core/ids/id";
+import { BookID, ID, TagID, UserBookID, UserID,libraryGroupID } from "@/core/ids/id";
 
 export type ReadingStatus =
   | "inspiration"
@@ -22,11 +22,11 @@ export type OwnershipStatus =
   | "acquire";  // jeg ønsker en anden giver/låner mig den (To seek/obtain)
 
 export interface UserBook {
-  id: ID;
+  id: UserBookID;
 
   /** Ownership */
-  userId: ID;
-  bookId: ID;
+  userId: UserID;
+  bookId: BookID;
 
   /** Personal state */
   readingStatus: ReadingStatus;
@@ -34,10 +34,10 @@ export interface UserBook {
   intentStatus?: IntentStatus;
 
   // Library-only grouping (NOT a movable group)
-  libraryGroupId?: ID; // fx "harry-potter-series"
+  libraryGroupId?: libraryGroupID; // fx "harry-potter-series"
 
 
-  tagIds?: ID[];
+  tagIds?: TagID[];
   syncState: "local" | "pending" | "synced" | "error";
 
   /** Optional 3D placement (future) */

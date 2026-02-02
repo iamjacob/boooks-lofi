@@ -1,9 +1,10 @@
-import { ID } from '@/core/ids/id';
+import { ShelfID , UserID} from '@/core/ids/id';
 
 export interface Shelf {
-  id: ID;
+  id: ShelfID;
 
-  ownerId: ID;
+  // ownerId: UserID;
+  userId: UserID;
 
   title: string;
   slug: string; // 👈 REQUIRED for routing
