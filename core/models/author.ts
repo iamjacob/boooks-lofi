@@ -1,14 +1,17 @@
-import { ID } from '@/core/ids/id';
+// core/models/author.ts
+import { AuthorID, UserID } from '@/core/ids/id';
 
 export interface Author {
-  id: ID;
+  id: AuthorID;
   name: string;
 
+  
   bio?: string;
   avatarUrl?: string;
   
   isSynced:boolean;
   lastSyncedAt?: number;
+  createdBy: UserID;
 
   createdAt: number;
   updatedAt?: number;

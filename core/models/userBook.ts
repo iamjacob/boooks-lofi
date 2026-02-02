@@ -57,7 +57,7 @@ export interface UserBook {
   commitState?: "draft" | "pending" | "committed";
  //something to auto update/append to mempool
 
-  isSynced:boolean;
+  isSynced?:boolean;
   lastSyncedAt?: number;
   createdAt: number;
   updatedAt?: number;

@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { BookID, AuthorID, UserID,CategoryID,TagID,AssetID } from '@/core/ids/id';
 
 export type BookState =
   | 'draft'
@@ -8,29 +8,29 @@ export type BookState =
 
   
 export interface Book {
-  id: ID;
+  id: BookID;
 
   /** Lineage */
-  parentId?: ID; // sibling / child / merge logic
+  parentId?: BookID; // sibling / child / merge logic
 
   /** Metadata */
   title?: string;
   subtitle?: string;
 
-  authorID?: ID;
+  authorID?: AuthorID;
   description?: string;
   language?: string;
   publishedYear?: number;
 
   /** Classification */
-  categoryIds?: ID[];
-  tagIds?: ID[];
+  categoryIds?: CategoryID[];
+  tagIds?: TagID[];
 
   /** Assets */
-  assetIds?: ID[];
+  assetIds?: AssetID[];
 
   /** Ownership */
-  createdBy: ID;
+  createdBy: UserID;
 
   /** Lifecycle */
   state: BookState;

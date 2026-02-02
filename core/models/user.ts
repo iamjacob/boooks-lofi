@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { ShelfID, UserID } from '@/core/ids/id';
 
 
 export type ThemePreference =
@@ -8,7 +8,7 @@ export type ThemePreference =
   | 'bw'; // black & white default (Scandi 👌)
 
 export interface User {
-  id: ID;
+  id:UserID;
 
   handle: string;
   displayName?: string;
@@ -26,7 +26,7 @@ export interface User {
   /** Reading language(s) */
   readingLanguages?: string[]; // ['en', 'da']
 
-  defaultShelfId: ID;
+  defaultShelfId: ShelfID;
     isSynced:boolean;
   lastSyncedAt?: number;
 
