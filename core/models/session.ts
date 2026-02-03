@@ -1,9 +1,9 @@
-import { ID } from '@/core/ids/id';
+import { SessionID, UserID, DeviceID } from '@/core/ids/id';
 
 export interface Session {
-  id: ID;
-  userId: ID;
-  deviceId: ID;
+  id: SessionID;
+  userId: UserID;
+  deviceId: DeviceID;
 
   token: string;
 

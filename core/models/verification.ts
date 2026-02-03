@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { VerificationID, IdentityID } from '@/core/ids/id';
 
 export type VerificationLevel =
   | 'none'
@@ -8,9 +8,9 @@ export type VerificationLevel =
   | 'web_of_trust';
 
 export interface Verification {
-  id: ID;
+  id: VerificationID;
 
-  identityId: ID;
+  identityId: IdentityID;
 
   level: VerificationLevel;
 

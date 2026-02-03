@@ -1,8 +1,8 @@
 // core/models/tag.ts
-import { ID } from '@/core/ids/id';
+import { TagID, UserID, CategoryID } from '@/core/ids/id';
 
 export interface Tag {
-  id: ID;
+  id: TagID;
 
   /** Canonical label */
   label: string;
@@ -11,10 +11,10 @@ export interface Tag {
   slug: string; // 'true-north', 'ai-ethics'
 
   /** Ownership */
-  createdBy: ID;
+  createdBy: UserID;
 
   /** Optional grouping */
-  categoryId?: ID;
+  categoryId?: CategoryID;
 
   isSynced:boolean;
   lastSyncedAt?: number;

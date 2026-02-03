@@ -1,4 +1,5 @@
 // core/models/bookImage.ts
+import { BookImageID, BookID } from '@/core/ids/id';
 
 export type ImageSize = "xs" | "small" | "medium" | "large";
 
@@ -89,7 +90,8 @@ export type BookImageRoleEntry = {
  * Entire image set for a book (or edition later)
  */
 export type BookImageSet = {
-  id: string;
+  id: BookImageID;
+  bookId?: BookID;
   roles: Partial<Record<BookImageRole, BookImageRoleEntry>>;
 
     isSynced:boolean;

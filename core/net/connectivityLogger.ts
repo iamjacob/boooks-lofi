@@ -5,8 +5,8 @@ import { createId } from '@/core/ids/id';
 import { isOnline } from '@/core/net/isOnline';
 import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
-import { HistoryEvent } from '@/core/history/event';
-import { HistoryEventType } from '@/core/history/types';
+import { HistoryEvent } from '@/_trash_here/history/event';
+import { HistoryEventType } from '@/_trash_here/history/types';
 
 type ConnectivityPayload = {
   durationMs?: number;

@@ -1,20 +1,20 @@
 // core/models/tgd.ts
-import { ID } from '@/core/ids/id';
+import { TGDID, UserID } from '@/core/ids/id';
 
 export type TGDType = 'thought' | 'goal' | 'dream';
 
 export interface TGD {
-  id: ID;
+  id: TGDID;
 
   type: TGDType;
 
   text: string;
 
   /** Owner */
-  userId: ID;
+  userId: UserID;
 
   /** Optional evolution */
-  parentId?: ID; // previous version
+  parentId?: TGDID; // previous version
 
   isSynced:boolean;
   lastSyncedAt?: number;

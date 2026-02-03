@@ -1,9 +1,9 @@
-import { ID } from '@/core/ids/id';
+import { CollectionItemID, CollectionID, ShelfInstanceID } from '@/core/ids/id';
 
 export interface CollectionItem {
-  id: ID;
-  collectionId: ID;
-  shelfInstanceId: ID;
+  id: CollectionItemID;
+  collectionId: CollectionID;
+  shelfInstanceId: ShelfInstanceID;
 
   position?: [number, number, number];
   rotation?: [number, number, number];

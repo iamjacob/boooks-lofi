@@ -1,8 +1,8 @@
-import { ID } from '@/core/ids/id';
+import { LibraryGroupID, UserID } from '@/core/ids/id';
 
 export interface LibraryGroup {
-    id: ID;
-    ownerId: ID;
+    id: LibraryGroupID;
+    ownerId: UserID;
     title: string; // "Harry Potter"
 
     isSynced: boolean;

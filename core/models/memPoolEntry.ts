@@ -1,62 +1,27 @@
-import { ID } from '@/core/ids/id';
+import { MemPoolEntryID, UserID, BookID, ShelfInstanceID, ArtifactID } from '@/core/ids/id';
 
-export type MempoolStatus =
-  | 'pending'
-  | 'under_review'
-  | 'accepted'
-  | 'rejected'
-  | 'superseded';
-
-export type MempoolIntent =
-  | 'publish_new'
-  | 'attach_child'
-  | 'attach_parent'
-  | 'merge_duplicate'
-  | 'update_metadata';
+export type MempoolTarget =
+  | 'book'
+  | 'shelf_instance';
 
 export interface MempoolEntry {
-  id: ID;
+  id: MemPoolEntryID;
 
-  /** Who proposes this change */
-  submittedBy: ID;          // identity/user id
-  deviceId?: ID;
+  targetType: MempoolTarget;
+  targetId: BookID | ShelfInstanceID;
 
-  /** What is being proposed */
-  intent: MempoolIntent;
+  submittedBy: UserID;
 
-  /** The draft book node the user submitted */
-  draftBookId: ID;
+  /** Validation / social graph */
+  network: 'boooks';
+  reputationWeight?: number;
 
-  /**
-   * Optional lineage targets after server reconciliation:
-   * - parentCandidateId if server thinks it belongs under a parent
-   * - mergeIntoBookId if it matches an existing canonical node
-   */
-  parentCandidateId?: ID;
-  mergeIntoBookId?: ID;
-
-  /** Evidence artifacts (scan images, pdfs, OCR, etc.) */
-  evidenceArtifactIds?: ID[];
-
-  /** Server matching / confidence signals */
-  match?: {
-    type?: 'same' | 'sibling' | 'child' | 'parent' | 'unknown';
-    confidence?: number; // 0–1
-    candidates?: Array<{ bookId: ID; confidence: number }>;
+  evidence?: {
+    scans?: ArtifactID[];
+    references?: ArtifactID[];
   };
 
-  /** Validation state */
-  status: MempoolStatus;
-
-  /** Voting / reputation hooks (kept minimal) */
-  votes?: {
-    up: number;
-    down: number;
-  };
-
-    isSynced:boolean;
-  lastSyncedAt?: number;
+  state: 'pending' | 'accepted' | 'rejected';
 
   createdAt: number;
-  updatedAt?: number;
 }

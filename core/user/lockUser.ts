@@ -2,7 +2,7 @@ import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
 import { User } from '@/core/models/user';
 import { hashPin, verifyPin } from '@/core/security/pin';
-import { logEvent } from '@/core/history/logEvent';
+import { logEvent } from '@/_trash_here/history/logEvent';
 
 export async function setUserPin(
   adapter: StorageAdapter,

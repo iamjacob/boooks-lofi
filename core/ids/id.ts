@@ -15,6 +15,23 @@ export type TagID = Brand<string, 'TagID'>;
 export type AssetID = Brand<string, 'AssetID'>;
 export type ShelfInstanceID = Brand<string, 'ShelfInstanceID'>;
 export type LibraryGroupID = Brand<string, 'LibraryGroupID'>;
+export type CollectionID = Brand<string, 'CollectionID'>;
+export type CollectionItemID = Brand<string, 'CollectionItemID'>;
+export type ClipID = Brand<string, 'ClipID'>;
+export type LibraryCollectionID = Brand<string, 'LibraryCollectionID'>;
+export type VerificationID = Brand<string, 'VerificationID'>;
+export type IdentityID = Brand<string, 'IdentityID'>;
+export type TGDID = Brand<string, 'TGDID'>;
+export type ArtifactID = Brand<string, 'ArtifactID'>;
+export type JobID = Brand<string, 'JobID'>;
+export type CommentThreadID = Brand<string, 'CommentThreadID'>;
+export type CommentID = Brand<string, 'CommentID'>;
+export type SessionID = Brand<string, 'SessionID'>;
+export type ReadingSessionID = Brand<string, 'ReadingSessionID'>;
+export type BookAssetID = Brand<string, 'BookAssetID'>;
+export type BookImageID = Brand<string, 'BookImageID'>;
+export type MemPoolEntryID = Brand<string, 'MemPoolEntryID'>;
+export type DeviceID = Brand<string, 'DeviceID'>;
 
 /**
  * Generate a lexicographically sortable, offline-safe ID (ULID-like).

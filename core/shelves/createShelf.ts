@@ -2,7 +2,7 @@ import { createId } from "@/core/ids/id";
 import { StorageAdapter } from "@/storage/adapter";
 import { storageKeys } from "@/storage/keys";
 import { Shelf } from "@/core/models/shelf";
-import { logEvent } from "@/core/history/logEvent";
+import { logEvent } from "@/_trash_here/history/logEvent";
 
 /**
  * Create a new shelf for a user.

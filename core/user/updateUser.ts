@@ -1,7 +1,7 @@
 import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
 import { User } from '@/core/models/user';
-import { logEvent } from '@/core/history/logEvent';
+import { logEvent } from '@/_trash_here/history/logEvent';
 
 /**
  * Update an existing user (e.g. rename, change mode, theme, etc)

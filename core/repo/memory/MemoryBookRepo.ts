@@ -1,9 +1,9 @@
 import { BookRepository } from '../BookRepository';
 import { Book } from '@/core/models/book';
-import { ID } from '@/core/ids/id';
+import { BookID } from '@/core/ids/id';
 
 export class MemoryBookRepo implements BookRepository {
-  private books = new Map<ID, Book>();
+  private books = new Map<BookID, Book>();
 
   async insert(book: Book) {
     this.books.set(book.id, book);
@@ -13,11 +13,11 @@ export class MemoryBookRepo implements BookRepository {
     this.books.set(book.id, book);
   }
 
-  async delete(id: ID) {
+  async delete(id: BookID) {
     this.books.delete(id);
   }
 
-  async get(id: ID) {
+  async get(id: BookID) {
     return this.books.get(id);
   }
 

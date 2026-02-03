@@ -1,5 +1,5 @@
 // core/models/bookAsset.ts
-import { ID } from '@/core/ids/id';
+import { BookAssetID, BookID } from '@/core/ids/id';
 
 export type BookAssetType =
   | 'cover'
@@ -9,8 +9,8 @@ export type BookAssetType =
   | 'audio';
 
 export interface BookAsset {
-  id: ID;
-  bookId: ID;
+  id: BookAssetID;
+  bookId: BookID;
 
   type: BookAssetType;
 

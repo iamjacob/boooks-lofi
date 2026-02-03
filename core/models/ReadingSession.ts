@@ -1,9 +1,9 @@
 // core/models/ReadingSession.ts
-import { ID } from '@/core/ids/id';
+import { ReadingSessionID, UserBookID } from '@/core/ids/id';
 
 export type ReadingSession = {
-  id: ID;
-  userBookId: ID;
+  id: ReadingSessionID;
+  userBookId: UserBookID;
 
   startedAt: number;
   endedAt?: number;

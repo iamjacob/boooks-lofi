@@ -1,4 +1,4 @@
-import { ShelfInstanceID, UserBookID, ShelfID, ShelfGroupID, TagID } from '@/core/ids/id';
+import { ShelfInstanceID, UserBookID, ShelfID, ShelfGroupID, TagID, CommentThreadID } from '@/core/ids/id';
 
 /**
  * ShelfInstance = a contextual expression of a UserBook.
@@ -29,7 +29,7 @@ export interface ShelfInstance {
 
   /** Social layer */
   visibility?: 'private' | 'public';
-  // commentThreadId?: ID;
+  // commentThreadId?: CommentThreadID;
 
   /** Mempool state */
   state?: 'local' | 'pending' | 'published';

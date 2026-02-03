@@ -1,7 +1,7 @@
 import { Book } from '@/core/models/book';
-import { ID } from '@/core/ids/id';
+import { BookID } from '@/core/ids/id';
 
-const books = new Map<ID, Book>();
+const books = new Map<BookID, Book>();
 
 export const bookRepo = {
   insert(book: Book) {
@@ -12,7 +12,7 @@ export const bookRepo = {
     books.set(book.id, book);
   },
 
-  get(id: ID): Book | undefined {
+  get(id: BookID): Book | undefined {
     return books.get(id);
   },
 
@@ -20,7 +20,7 @@ export const bookRepo = {
     return Array.from(books.values());
   },
 
-  delete(id: ID) {
+  delete(id: BookID) {
     books.delete(id);
   },
 

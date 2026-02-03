@@ -1,8 +1,8 @@
-import { ID } from '@/core/ids/id';
+import { ShelfGroupID, ShelfID } from '@/core/ids/id';
 
 export interface ShelfGroup {
-  id: ID;
-  shelfId: ID;
+  id: ShelfGroupID;
+  shelfId: ShelfID;
   title: string; // "Harry Potter"
   slug:string; //nice for deeplink!
 

@@ -1,14 +1,14 @@
-import { ID } from '@/core/ids/id';
+import { CategoryID } from '@/core/ids/id';
 
 export interface Category {
-  id: ID;
+  id: CategoryID;
 
   /** Display */
   name: string;
   slug: string;
 
   /** Hierarchy */
-  parentId?: ID; // null = top-level
+  parentId?: CategoryID; // null = top-level
 
   /** Metadata */
   description?: string;

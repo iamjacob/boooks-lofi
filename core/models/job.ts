@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { JobID, UserID, DeviceID, ShelfID, CollectionID, BookID, ArtifactID } from '@/core/ids/id';
 
 export type JobType =
   | 'scan_book'
@@ -17,26 +17,26 @@ export type JobStatus =
   | 'cancelled';
 
 export interface Job {
-  id: ID;
+  id: JobID;
 
-  userId: ID;
-  deviceId?: ID;
+  userId: UserID;
+  deviceId?: DeviceID;
 
   type: JobType;
   status: JobStatus;
 
   /** Optional target context */
-  shelfId?: ID;
-  collectionId?: ID;
-  bookId?: ID;
+  shelfId?: ShelfID;
+  collectionId?: CollectionID;
+  bookId?: BookID;
 
   /** Steps for multi-stage flows (scanner) */
   steps?: string[]; // ['spine','front','back']
   stepIndex?: number;
 
   /** Inputs/outputs as artifact links */
-  inputArtifactIds?: ID[];
-  outputArtifactIds?: ID[];
+  inputArtifactIds?: ArtifactID[];
+  outputArtifactIds?: ArtifactID[];
 
   /** OCR payload (optional) */
   ocr?: {

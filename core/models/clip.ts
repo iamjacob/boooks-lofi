@@ -1,5 +1,5 @@
 // core/models/clip.ts
-import { ID } from '@/core/ids/id';
+import { ClipID, BookID, ShelfID, UserID } from '@/core/ids/id';
 
 export type ClipType =
   | 'quote'
@@ -16,7 +16,7 @@ export interface ClipSource {
 }
 
 export interface Clip {
-  id: ID;
+  id: ClipID;
 
   type: ClipType;
 
@@ -27,11 +27,11 @@ export interface Clip {
   source?: ClipSource;
 
   /** Relations */
-  bookId?: ID;
-  shelfId?: ID;
+  bookId?: BookID;
+  shelfId?: ShelfID;
 
   /** Ownership */
-  createdBy: ID; // userId
+  createdBy: UserID; // userId
 
     isSynced:boolean;
   lastSyncedAt?: number;

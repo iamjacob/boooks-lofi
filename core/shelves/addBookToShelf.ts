@@ -2,7 +2,7 @@ import { createId } from '@/core/ids/id';
 import { StorageAdapter } from '@/storage/adapter';
 import { storageKeys } from '@/storage/keys';
 import { ShelfInstance } from '@/core/models/shelfInstance';
-import { logEvent } from '@/core/history/logEvent';
+import { logEvent } from '@/_trash_here/history/logEvent';
 
 /**
  * Create a ShelfInstance (projection of a UserBook into a Shelf)

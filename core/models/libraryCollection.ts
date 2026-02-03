@@ -1,17 +1,17 @@
-import { ID } from '@/core/ids/id';
+import { LibraryCollectionID, UserID, UserBookID } from '@/core/ids/id';
 
 export interface LibraryCollection {
-  id: ID;
-  ownerId: ID;
+  id: LibraryCollectionID;
+  ownerId: UserID;
 
   title: string;
   slug?: string;
 
   // membership
-  userBookIds: ID[];
+  userBookIds: UserBookID[];
 
   // ordering inside the collection
-  order?: ID[];
+  order?: UserBookID[];
 
   // sync
   isSynced: boolean;

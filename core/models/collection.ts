@@ -1,10 +1,10 @@
-import { ID } from '@/core/ids/id';
+import { CollectionID, ShelfID, TagID } from '@/core/ids/id';
 
 export interface Collection {
-  id: ID;
+  id: CollectionID;
 
   /** Parent shelf */
-  shelfId: ID;
+  shelfId: ShelfID;
 
   title: string;
 
@@ -14,7 +14,7 @@ export interface Collection {
 
   /** Declarative filter (books are NOT owned by collections) */
   filter?: {
-    tagIds?: ID[];
+    tagIds?: TagID[];
     authors?: string[];
     languages?: string[];
   };

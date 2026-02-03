@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { ArtifactID, BookID, JobID } from '@/core/ids/id';
 
 export type ArtifactType =
   | 'image'
@@ -17,13 +17,13 @@ export type ArtifactSource =
   | 'remote_url';
 
 export interface Artifact {
-  id: ID;
+  id: ArtifactID;
 
   /** Optional link to the abstract work */
-  bookId?: ID;
+  bookId?: BookID;
 
   /** Optional link to a specific job that produced it */
-  jobId?: ID;
+  jobId?: JobID;
 
   type: ArtifactType;
   source: ArtifactSource;
