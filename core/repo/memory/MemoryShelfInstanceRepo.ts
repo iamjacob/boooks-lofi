@@ -30,9 +30,9 @@ export class MemoryShelfInstanceRepo {
   return Array.from(this.instances.values());
 }
 
-  async getByShelf(shelfId: string) {
-    return Array.from(this.instances.values()).filter(
-      i => i.shelfId === shelfId
-    );
-  }
+  async getByShelf(shelfId: ShelfID) {
+  return Array.from(this.instances.values()).filter(
+    i => i.shelfId === shelfId
+  );
+}
 }

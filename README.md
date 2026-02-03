@@ -13,9 +13,28 @@ Vi tror på, at samfundet bliver klogere og mere menneskeligt, når læsning væ
 What are you reading? Det er ikke et krav – det er en åben invitation.
 
 
+Boooks is:
+A quiet rebellion against a loud, stupid world
+A place where thought is sacred again
+
+Doomscroll: 
+“This mode exists for conscious exposure.
+It is intentionally priced to slow you down.
+Depth is free. Distraction is not.”
+
+“Yes, sometimes we want stimulation.
+We just refuse to pretend it’s nourishment.”
 
 
-
+Settings
+ ├─ Reading
+ ├─ Shelves
+ ├─ Offline
+ ├─ Privacy
+ ├─ About Boooks
+       ├─ Principles
+       ├─ How Boooks Stays Free
+       └─ Exposure Mode
 
 # hoooks
 language

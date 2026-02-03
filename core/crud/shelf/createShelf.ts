@@ -8,6 +8,9 @@ export async function createShelf(input: {
   slug: string;
   visibility: 'private' | 'public';
 }): Promise<Shelf> {
+
+  const now = Date.now();
+
   const shelf: Shelf = {
     id: createId<'ShelfID'>(),
     ownerId: input.ownerId,
@@ -15,7 +18,9 @@ export async function createShelf(input: {
     slug: input.slug,
     visibility: input.visibility,
     isSynced: false,
-    createdAt: Date.now(),
+    createdAt: now,
+    updatedAt: now,
+
   };
 
   await shelfRepo.insert(shelf);

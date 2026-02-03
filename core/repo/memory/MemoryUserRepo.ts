@@ -20,4 +20,8 @@ export class MemoryUserRepo implements UserRepository {
   async update(user: User) {
   this.users.set(user.id, user);
 }
+
+  async delete(id: UserID) {
+    this.users.delete(id);
+  }
 }
