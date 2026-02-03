@@ -1,4 +1,4 @@
-import { JobID, UserID, DeviceID, ShelfID, CollectionID, BookID, ArtifactID } from '@/core/ids/id';
+import { JobID, UserID, DeviceID, ShelfID, CollectionID, BookID, ArtifactID } from '@/core/models/ids/id';
 
 export type JobType =
   | 'scan_book'

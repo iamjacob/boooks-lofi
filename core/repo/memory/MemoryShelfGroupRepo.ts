@@ -1,5 +1,5 @@
 import { ShelfGroup } from '@/core/models/shelfGroup';
-import { ShelfGroupID, ShelfID } from '@/core/ids/id';
+import { ShelfGroupID, ShelfID } from '@/core/models/ids/id';
 
 export class MemoryShelfGroupRepo {
   private shelfGroups = new Map<ShelfGroupID, ShelfGroup>();

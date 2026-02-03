@@ -1,4 +1,4 @@
-import { UserBookID, LibraryGroupID } from '@/core/ids/id';
+import { UserBookID, LibraryGroupID } from '@/core/models/ids/id';
 import { userBookRepo } from '@/core/repo';
 
 export async function assignLibraryGroup(

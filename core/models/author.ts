@@ -1,5 +1,5 @@
 // core/models/author.ts
-import { AuthorID, UserID } from '@/core/ids/id';
+import { AuthorID, UserID } from '@/core/models/ids/id';
 
 export interface Author {
   id: AuthorID;

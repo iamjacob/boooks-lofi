@@ -1,6 +1,6 @@
 import { userBookRepo } from '@/core/repo';
 import { ReadingStatus } from '@/core/models/userBook';
-import { ID, UserBookID } from '@/core/ids/id';
+import { ID, UserBookID } from '@/core/models/ids/id';
 
 export async function setReadingStatus(
   userBookId: UserBookID,

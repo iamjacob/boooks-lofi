@@ -1,6 +1,6 @@
 import { UserRepository } from '../UserRepository';
 import { User } from '@/core/models/user';
-import { UserID } from '@/core/ids/id';
+import { UserID } from '@/core/models/ids/id';
 
 export class MemoryUserRepo implements UserRepository {
   private users = new Map<UserID, User>();

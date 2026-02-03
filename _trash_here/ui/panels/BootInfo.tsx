@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
+import { IndexedDBAdapter } from '@/core/storage/idb';
 import { bootstrapUser } from '@/_trash_here/bootstrap/bootstrapUser';
 import { Device } from '@/core/models/identity/device';
 import { User } from '@/core/models/user';

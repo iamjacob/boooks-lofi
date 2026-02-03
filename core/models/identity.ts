@@ -1,4 +1,4 @@
-import { IdentityID, UserID } from '@/core/ids/id';
+import { IdentityID, UserID } from '@/core/models/ids/id';
 
 export type IdentityType =
   | 'user'           // Primary user identity

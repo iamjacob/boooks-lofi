@@ -1,5 +1,5 @@
 // core/models/bookImage.ts
-import { BookImageID, BookID } from '@/core/ids/id';
+import { BookImageID, BookID } from '@/core/models/ids/id';
 
 export type ImageSize = "xs" | "small" | "medium" | "large";
 

@@ -1,5 +1,5 @@
 // core/models/bookAsset.ts
-import { BookAssetID, BookID } from '@/core/ids/id';
+import { BookAssetID, BookID } from '@/core/models/ids/id';
 
 export type BookAssetType =
   | 'cover'

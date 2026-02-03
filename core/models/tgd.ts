@@ -1,5 +1,5 @@
 // core/models/tgd.ts
-import { TGDID, UserID } from '@/core/ids/id';
+import { TGDID, UserID } from '@/core/models/ids/id';
 
 export type TGDType = 'thought' | 'goal' | 'dream';
 

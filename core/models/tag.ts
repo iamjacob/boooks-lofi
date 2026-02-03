@@ -1,5 +1,5 @@
 // core/models/tag.ts
-import { TagID, UserID, CategoryID } from '@/core/ids/id';
+import { TagID, UserID, CategoryID } from '@/core/models/ids/id';
 
 export interface Tag {
   id: TagID;

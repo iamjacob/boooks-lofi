@@ -1,6 +1,6 @@
 import { AuthorRepository } from '../AuthorRepository';
 import { Author } from '@/core/models/author';
-import { AuthorID } from '@/core/ids/id';
+import { AuthorID } from '@/core/models/ids/id';
 
 export class MemoryAuthorRepo implements AuthorRepository {
   private authors = new Map<AuthorID, Author>();

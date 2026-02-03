@@ -1,4 +1,4 @@
-import { UserBookID, ShelfID } from '@/core/ids/id';
+import { UserBookID, ShelfID } from '@/core/models/ids/id';
 import { userBookRepo } from '@/core/repo';
 
 /**

@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
+import { IndexedDBAdapter } from '@/core/storage/idb';
 import { updateUser } from '@/core/user/updateUser';
 import { ThemePreference, User } from '@/core/models/user';
-import { storageKeys } from '@/storage/keys';
+import { storageKeys } from '@/core/storage/keys';
 import { applyTheme } from '@/ui/theme/applyTheme';
 
 export function UserThemePanel({

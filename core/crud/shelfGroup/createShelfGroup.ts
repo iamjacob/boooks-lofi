@@ -1,6 +1,6 @@
 import { ShelfGroup } from '@/core/models/shelfGroup';
 import { shelfGroupRepo } from '@/core/repo';
-import { createId, ShelfID } from '@/core/ids/id';
+import { createId, ShelfID } from '@/core/models/ids/id';
 
 export async function createShelfGroup(input: {
   shelfId: ShelfID;

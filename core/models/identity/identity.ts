@@ -1,5 +1,5 @@
 // core/identity/session.ts
-import { SessionID, IdentityID, UserID, DeviceID } from '@/core/ids/id';
+import { SessionID, IdentityID, UserID, DeviceID } from '@/core/models/ids/id';
 
 export type SessionStatus = 'active' | 'revoked' | 'expired';
 

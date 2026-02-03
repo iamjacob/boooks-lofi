@@ -1,5 +1,5 @@
 import { Author } from '@/core/models/author';
-import { AuthorID } from '@/core/ids/id';
+import { AuthorID } from '@/core/models/ids/id';
 
 export interface AuthorRepository {
   get(id: AuthorID): Promise<Author | undefined>;

@@ -2,7 +2,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
+import { IndexedDBAdapter } from '@/core/storage/idb';
 import { createUser } from '@/core/user/createUser';
 
 export function UserCreatePanel() {

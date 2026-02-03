@@ -1,4 +1,4 @@
-import { ArtifactID, BookID, JobID } from '@/core/ids/id';
+import { ArtifactID, BookID, JobID } from '@/core/models/ids/id';
 
 export type ArtifactType =
   | 'image'

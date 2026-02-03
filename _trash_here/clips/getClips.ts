@@ -1,5 +1,5 @@
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { Clip } from '@/core/models/clip';
 
 export async function getClips(

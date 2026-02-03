@@ -1,6 +1,6 @@
 import { ShelfInstance } from '@/core/models/shelfInstance';
 import { shelfInstanceRepo } from '@/core/repo';
-import { createId, ShelfID, UserBookID } from '@/core/ids/id';
+import { createId, ShelfID, UserBookID } from '@/core/models/ids/id';
 
 export async function createShelfInstance(input: {
   userBookId: UserBookID;

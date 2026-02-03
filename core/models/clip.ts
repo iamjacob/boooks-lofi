@@ -1,5 +1,5 @@
 // core/models/clip.ts
-import { ClipID, BookID, ShelfID, UserID } from '@/core/ids/id';
+import { ClipID, BookID, ShelfID, UserID } from '@/core/models/ids/id';
 
 export type ClipType =
   | 'quote'

@@ -1,4 +1,4 @@
-import { DeviceID, UserID } from '@/core/ids/id';
+import { DeviceID, UserID } from '@/core/models/ids/id';
 
 export interface Device {
   id: DeviceID;

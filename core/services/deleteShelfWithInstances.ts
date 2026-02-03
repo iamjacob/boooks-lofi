@@ -1,4 +1,4 @@
-import { ShelfID, UserID } from '@/core/ids/id';
+import { ShelfID, UserID } from '@/core/models/ids/id';
 import { shelfRepo, shelfInstanceRepo } from '@/core/repo';
 import { deleteShelf } from '@/core/crud/shelf/deleteShelf';
 

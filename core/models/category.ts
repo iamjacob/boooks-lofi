@@ -1,4 +1,4 @@
-import { CategoryID } from '@/core/ids/id';
+import { CategoryID } from '@/core/models/ids/id';
 
 export interface Category {
   id: CategoryID;

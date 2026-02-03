@@ -1,4 +1,4 @@
-import { ID } from '@/core/ids/id';
+import { ID } from '@/core/models/ids/id';
 
 type LibraryActions = {
   openCreateBook: () => void;

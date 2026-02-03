@@ -1,6 +1,6 @@
 import { Collection } from '@/core/models/collection';
 import { collectionRepo } from '@/core/repo';
-import { CollectionID, ID } from '@/core/ids/id';
+import { CollectionID, ID } from '@/core/models/ids/id';
 
 export async function updateCollection(
   collectionId: CollectionID,

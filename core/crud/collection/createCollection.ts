@@ -1,6 +1,6 @@
 import { Collection } from '@/core/models/collection';
 import { collectionRepo } from '@/core/repo';
-import { createId, ShelfID, TagID } from '@/core/ids/id';
+import { createId, ShelfID, TagID } from '@/core/models/ids/id';
 
 export async function createCollection(input: {
   shelfId: ShelfID;

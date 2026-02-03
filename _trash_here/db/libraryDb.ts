@@ -1,9 +1,9 @@
 import { BookListItem } from "@/ui/models/bookListItem";
 import { UserBook } from "@/core/models/userBook";
 import { Shelf } from "@/core/models/shelf";
-import { IndexedDBAdapter } from "@/storage/idb";
-import { storageKeys } from "@/storage/keys";
-import { ID } from "@/core/ids/id";
+import { IndexedDBAdapter } from "@/core/storage/idb";
+import { storageKeys } from "@/core/storage/keys";
+import { ID } from "@/core/models/ids/id";
 
 const adapter = new IndexedDBAdapter();
 /* ---------------- COLLECTIONS (FASE 1 STUB) ---------------- */

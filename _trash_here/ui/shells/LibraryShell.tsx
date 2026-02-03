@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 import { Shelf } from "@/core/models/shelf";
 import { BookListItem } from "@/ui/models/bookListItem";
 import { LibraryHeader } from "@/ui/components/library/LibraryHeader";
@@ -14,7 +14,7 @@ import {
 } from "@/_trash_here/library/libraryCrud";
 import { getLocalUserByUsername } from "@/core/users/getLocalUser";
 import ShelfSwitcher from "@/ui/components/library/ShelfSwitcher";
-import { saveOnShelf } from "@/core/shelves/saveOnShelf";
+import { saveOnShelf } from "@/core/services/shelves/saveOnShelf";
 type Props = {
   username: string; // handle from url (already stripped of @ typically)
   shelf: string; // "library" | "default" | "home" | slug

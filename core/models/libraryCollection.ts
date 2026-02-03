@@ -1,4 +1,4 @@
-import { LibraryCollectionID, UserID, UserBookID } from '@/core/ids/id';
+import { LibraryCollectionID, UserID, UserBookID } from '@/core/models/ids/id';
 
 export interface LibraryCollection {
   id: LibraryCollectionID;

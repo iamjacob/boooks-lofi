@@ -1,4 +1,4 @@
-import { UserID, BookID } from '@/core/ids/id';
+import { UserID, BookID } from '@/core/models/ids/id';
 import { userBookRepo } from '@/core/repo';
 
 /**

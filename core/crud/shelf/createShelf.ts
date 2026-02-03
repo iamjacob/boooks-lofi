@@ -1,6 +1,6 @@
 import { Shelf } from '@/core/models/shelf';
 import { shelfRepo } from '@/core/repo';
-import { createId, UserID } from '@/core/ids/id';
+import { createId, UserID } from '@/core/models/ids/id';
 
 export async function createShelf(input: {
   ownerId: UserID;

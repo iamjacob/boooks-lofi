@@ -1,5 +1,5 @@
 // ui/mocks/shelves.mock.ts
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 
 export type Shelf = {
   id: ID;

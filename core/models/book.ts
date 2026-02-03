@@ -1,4 +1,4 @@
-import { BookID, AuthorID, UserID,CategoryID,TagID,AssetID } from '@/core/ids/id';
+import { BookID, AuthorID, UserID,CategoryID,TagID,AssetID } from '@/core/models/ids/id';
 
 export type BookState =
   | 'draft'

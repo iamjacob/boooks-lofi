@@ -1,5 +1,5 @@
 import { Book } from '@/core/models/book';
-import { BookID } from '@/core/ids/id';
+import { BookID } from '@/core/models/ids/id';
 
 const books = new Map<BookID, Book>();
 

@@ -1,6 +1,6 @@
 import { UserBook } from '@/core/models/userBook';
 import { userBookRepo } from '@/core/repo';
-import { BookID, createId, UserID } from '@/core/ids/id'
+import { BookID, createId, UserID } from '@/core/models/ids/id'
 
 export async function createUserBook(input: {
   userId: UserID;

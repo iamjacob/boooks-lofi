@@ -1,7 +1,7 @@
 // core/clips/createClip.ts
-import { createId } from '@/core/ids/id';
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { createId } from '@/core/models/ids/id';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { Clip } from '@/core/models/clip';
 import { appendHistoryEvent } from '@/_trash_here/history/appendEvent';
 import { logEvent } from '@/_trash_here/history/logEvent';

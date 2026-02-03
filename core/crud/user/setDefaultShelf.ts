@@ -1,4 +1,4 @@
-import { UserID, ShelfID } from '@/core/ids/id';
+import { UserID, ShelfID } from '@/core/models/ids/id';
 import { userRepo } from '@/core/repo';
 
 export async function setDefaultShelf(

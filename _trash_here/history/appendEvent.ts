@@ -1,6 +1,6 @@
 // core/history/appendEvent.ts
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { HistoryEvent } from './event';
 
 export async function appendHistoryEvent<T>(

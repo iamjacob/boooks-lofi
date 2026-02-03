@@ -1,4 +1,4 @@
-import { CollectionID, ShelfID, TagID } from '@/core/ids/id';
+import { CollectionID, ShelfID, TagID } from '@/core/models/ids/id';
 
 export interface Collection {
   id: CollectionID;

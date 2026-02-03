@@ -3,10 +3,10 @@
 // ui/views/LibraryView.tsx
 
 import { useEffect, useMemo, useState } from "react";
-import { IndexedDBAdapter } from "@/storage/idb";
-import { storageKeys } from "@/storage/keys";
+import { IndexedDBAdapter } from "@/core/storage/idb";
+import { storageKeys } from "@/core/storage/keys";
 import { User } from "@/core/models/user";
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 import { LibraryHeader } from "@/ui/components/library/LibraryHeader";
 import { LibraryContent } from "@/ui/components/library/LibraryContent";
 import { loadLibraryRows, setReadingStatus, LibraryRow } from "@/_trash_here/library/libraryCrud";

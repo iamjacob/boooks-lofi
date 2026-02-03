@@ -1,7 +1,7 @@
 import { ShelfInstance } from "@/core/models/shelfInstance";
-import { ID } from "@/core/ids/id";
-import { IndexedDBAdapter } from "@/storage/idb";
-import { storageKeys } from "@/storage/keys";
+import { ID } from "@/core/models/ids/id";
+import { IndexedDBAdapter } from "@/core/storage/idb";
+import { storageKeys } from "@/core/storage/keys";
 
 /**
  * Low-level persistence for ShelfInstances.

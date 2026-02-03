@@ -1,4 +1,4 @@
-import { UserBookID } from '@/core/ids/id';
+import { UserBookID } from '@/core/models/ids/id';
 import { userBookRepo } from '@/core/repo';
 import { OwnershipStatus } from '@/core/models/userBook';
 

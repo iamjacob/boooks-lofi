@@ -1,4 +1,4 @@
-import { SessionID, UserID, DeviceID } from '@/core/ids/id';
+import { SessionID, UserID, DeviceID } from '@/core/models/ids/id';
 
 export interface Session {
   id: SessionID;

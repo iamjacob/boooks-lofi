@@ -1,5 +1,5 @@
-import { createId } from '@/core/ids/id';
-import { UserID, ShelfID } from '@/core/ids/id';
+import { createId } from '@/core/models/ids/id';
+import { UserID, ShelfID } from '@/core/models/ids/id';
 import { shelfRepo } from '@/core/repo';
 import { Shelf } from '@/core/models/shelf';
 

@@ -1,6 +1,6 @@
 import { Author } from '@/core/models/author';
 import { authorRepo } from '@/core/repo';
-import { createId, UserID } from '@/core/ids/id';
+import { createId, UserID } from '@/core/models/ids/id';
 export async function createAuthor(input: {
   name: string;
   createdBy: UserID;

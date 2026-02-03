@@ -1,6 +1,6 @@
 import { BookRepository } from '../BookRepository';
 import { Book } from '@/core/models/book';
-import { BookID } from '@/core/ids/id';
+import { BookID } from '@/core/models/ids/id';
 
 export class MemoryBookRepo implements BookRepository {
   private books = new Map<BookID, Book>();

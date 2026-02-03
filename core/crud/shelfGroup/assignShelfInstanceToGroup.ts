@@ -1,4 +1,4 @@
-import { ShelfInstanceID, ShelfGroupID } from '@/core/ids/id';
+import { ShelfInstanceID, ShelfGroupID } from '@/core/models/ids/id';
 import { shelfInstanceRepo } from '@/core/repo';
 
 export async function assignShelfInstanceToGroup(

@@ -1,4 +1,4 @@
-import { VerificationID, IdentityID } from '@/core/ids/id';
+import { VerificationID, IdentityID } from '@/core/models/ids/id';
 
 export type VerificationLevel =
   | 'none'

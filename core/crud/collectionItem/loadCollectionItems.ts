@@ -1,4 +1,4 @@
-import { CollectionID } from '@/core/ids/id';
+import { CollectionID } from '@/core/models/ids/id';
 import { collectionItemRepo } from '@/core/repo';
 
 export async function loadCollectionItems(collectionId: CollectionID) {

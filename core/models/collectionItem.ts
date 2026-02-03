@@ -1,4 +1,4 @@
-import { CollectionItemID, CollectionID, ShelfInstanceID } from '@/core/ids/id';
+import { CollectionItemID, CollectionID, ShelfInstanceID } from '@/core/models/ids/id';
 
 export interface CollectionItem {
   id: CollectionItemID;

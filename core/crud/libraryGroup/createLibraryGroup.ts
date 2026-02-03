@@ -1,6 +1,6 @@
 import { LibraryGroup } from '@/core/models/libraryGroup';
 import { libraryGroupRepo } from '@/core/repo';
-import { createId, UserID } from '@/core/ids/id';
+import { createId, UserID } from '@/core/models/ids/id';
 
 export async function createLibraryGroup(input: {
   ownerId: UserID;

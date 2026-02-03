@@ -2,9 +2,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
-import { getShelves } from '@/core/shelves/getShelves';
-import { createShelf } from '@/core/shelves/createShelf';
+import { IndexedDBAdapter } from '@/core/storage/idb';
+import { getShelves } from '@/core/services/shelves/getShelves';
+import { createShelf } from '@/core/services/shelves/createShelf';
 import { Shelf } from '@/core/models/shelf';
 
 export function ShelvesPanel({ userId }: { userId: string }) {

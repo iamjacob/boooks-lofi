@@ -1,4 +1,4 @@
-import ClientApp from "./client/ClientApp";
+import ClientApp from "../../_trash_here/client/ClientApp";
 
 type Props = {
   params: Promise<{

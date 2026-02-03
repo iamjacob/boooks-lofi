@@ -1,4 +1,4 @@
-import { CommentThreadID, CommentID, UserID, BookID, ShelfInstanceID, ClipID } from '@/core/ids/id';
+import { CommentThreadID, CommentID, UserID, BookID, ShelfInstanceID, ClipID } from '@/core/models/ids/id';
 
 export interface Comment {
   id: CommentID;

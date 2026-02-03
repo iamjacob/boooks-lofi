@@ -1,6 +1,6 @@
 // core/history/event.ts
 // core/history/event.ts
-import { ID } from '@/core/ids/id';
+import { ID } from '@/core/models/ids/id';
 import { HistoryEventType } from './types';
 
 export interface HistoryEvent<T = unknown> {

@@ -1,5 +1,5 @@
 import { User } from '@/core/models/user';
-import { UserID } from '@/core/ids/id';
+import { UserID } from '@/core/models/ids/id';
 
 export interface UserRepository {
   get(id: UserID): Promise<User | undefined>;

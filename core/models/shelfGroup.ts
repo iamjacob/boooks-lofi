@@ -1,4 +1,4 @@
-import { ShelfGroupID, ShelfID } from '@/core/ids/id';
+import { ShelfGroupID, ShelfID } from '@/core/models/ids/id';
 
 export interface ShelfGroup {
   id: ShelfGroupID;

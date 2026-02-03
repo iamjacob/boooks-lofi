@@ -1,5 +1,5 @@
 import { CollectionItem } from '@/core/models/collectionItem';
-import { CollectionItemID, CollectionID } from '@/core/ids/id';
+import { CollectionItemID, CollectionID } from '@/core/models/ids/id';
 
 export class MemoryCollectionItemRepo {
   private collectionItems = new Map<CollectionItemID, CollectionItem>();

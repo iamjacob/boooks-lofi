@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
-import { storageKeys } from '@/storage/keys';
+import { IndexedDBAdapter } from '@/core/storage/idb';
+import { storageKeys } from '@/core/storage/keys';
 import { HistoryEvent } from '@/_trash_here/history/event';
 import { HISTORY_UPDATED_EVENT } from '@/_trash_here/history/historyEvents';
 import { eventLabels } from '@/ui/history/eventLabels';

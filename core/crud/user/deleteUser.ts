@@ -1,4 +1,4 @@
-import { UserID } from '@/core/ids/id';
+import { UserID } from '@/core/models/ids/id';
 import { userRepo } from '@/core/repo';
 
 export async function deleteUser(userId: UserID) {

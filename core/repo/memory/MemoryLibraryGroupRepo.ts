@@ -1,5 +1,5 @@
 import { LibraryGroup } from '@/core/models/libraryGroup';
-import { LibraryGroupID, UserID } from '@/core/ids/id';
+import { LibraryGroupID, UserID } from '@/core/models/ids/id';
 
 export class MemoryLibraryGroupRepo {
   private libraryGroups = new Map<LibraryGroupID, LibraryGroup>();

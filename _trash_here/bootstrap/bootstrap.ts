@@ -1,7 +1,7 @@
 // core/bootstrap/bootstrap.ts
-import { createId } from '@/core/ids/id';
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { createId } from '@/core/models/ids/id';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { Device } from '@/core/models/identity/device';
 import { User } from '@/core/models/user';
 

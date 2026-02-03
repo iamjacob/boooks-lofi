@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
-import { storageKeys } from '@/storage/keys';
+import { IndexedDBAdapter } from '@/core/storage/idb';
+import { storageKeys } from '@/core/storage/keys';
 import { UserBook } from '@/core/models/userBook';
 
 import { Shelf } from '@/core/models/shelf';
-import { addBookToShelf } from '@/core/shelves/addBookToShelf';
+import { addBookToShelf } from '@/core/services/shelves/addBookToShelf';
 
 
 export function LibraryPanel({ userId }: { userId: string }) {

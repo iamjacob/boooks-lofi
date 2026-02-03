@@ -1,5 +1,5 @@
 import { Author } from '@/core/models/author';
-import { AuthorID } from '@/core/ids/id';
+import { AuthorID } from '@/core/models/ids/id';
 
 const authors = new Map<AuthorID, Author>();
 

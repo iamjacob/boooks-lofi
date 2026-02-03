@@ -1,5 +1,5 @@
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { Collection } from '@/core/models/collection';
 
 export async function getCollectionsForShelf(

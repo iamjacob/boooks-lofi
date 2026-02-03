@@ -1,4 +1,4 @@
-import { MemPoolEntryID, UserID, BookID, ShelfInstanceID, ArtifactID } from '@/core/ids/id';
+import { MemPoolEntryID, UserID, BookID, ShelfInstanceID, ArtifactID } from '@/core/models/ids/id';
 
 export type MempoolTarget =
   | 'book'

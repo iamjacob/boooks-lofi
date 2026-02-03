@@ -1,4 +1,4 @@
-import { ShelfInstanceID } from '@/core/ids/id';
+import { ShelfInstanceID } from '@/core/models/ids/id';
 import { shelfInstanceRepo } from '@/core/repo';
 
 export async function deleteShelfInstance(id: ShelfInstanceID) {

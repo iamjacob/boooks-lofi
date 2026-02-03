@@ -1,6 +1,6 @@
-import { createId } from '@/core/ids/id';
+import { createId } from '@/core/models/ids/id';
 import { Shelf } from '@/core/models/shelf';
-import { ShelfID, UserID } from '@/core/ids/id';
+import { ShelfID, UserID } from '@/core/models/ids/id';
 import { shelfRepo } from '@/core/repo';
 
 export async function createShelf(

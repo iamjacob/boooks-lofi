@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { IndexedDBAdapter } from '@/storage/idb';
+import { IndexedDBAdapter } from '@/core/storage/idb';
 import { addBook } from '@/_trash_here/library/addBook';
 
 export function AddBookPanel({ userId }: { userId: string }) {

@@ -1,6 +1,6 @@
 import { CollectionItem } from '@/core/models/collectionItem';
 import { collectionItemRepo } from '@/core/repo';
-import { createId, CollectionID, ShelfInstanceID } from '@/core/ids/id';
+import { createId, CollectionID, ShelfInstanceID } from '@/core/models/ids/id';
 
 export async function createCollectionItem(input: {
   collectionId: CollectionID;

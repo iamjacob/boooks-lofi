@@ -1,4 +1,4 @@
-import { ShelfInstanceID, UserBookID, ShelfID, ShelfGroupID, TagID, CommentThreadID } from '@/core/ids/id';
+import { ShelfInstanceID, UserBookID, ShelfID, ShelfGroupID, TagID, CommentThreadID } from '@/core/models/ids/id';
 
 /**
  * ShelfInstance = a contextual expression of a UserBook.

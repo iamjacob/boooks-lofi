@@ -1,4 +1,4 @@
-import { BookID, TagID, UserBookID, UserID, LibraryGroupID, ShelfID, IdentityID } from "@/core/ids/id";
+import { BookID, TagID, UserBookID, UserID, LibraryGroupID, ShelfID, IdentityID } from "@/core/models/ids/id";
 
 export type ReadingStatus =
   | "inspiration"

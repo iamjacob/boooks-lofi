@@ -1,5 +1,5 @@
 import { ShelfInstance } from '@/core/models/shelfInstance';
-import { ShelfInstanceID, UserBookID, ShelfID } from '@/core/ids/id';
+import { ShelfInstanceID, UserBookID, ShelfID } from '@/core/models/ids/id';
 
 export class MemoryShelfInstanceRepo {
   private instances = new Map<ShelfInstanceID, ShelfInstance>();

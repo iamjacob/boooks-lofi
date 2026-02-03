@@ -1,5 +1,5 @@
 // ui/models/bookListItem.ts
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 import type { BookImageSet } from "@/core/models/bookImage";
 
 export type BookListItem = {

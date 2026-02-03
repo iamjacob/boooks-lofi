@@ -1,5 +1,5 @@
 import { loadCollections } from "@/_trash_here/db/libraryDb";
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 
 export async function collectionExists(
   userId: ID,

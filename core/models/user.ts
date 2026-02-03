@@ -1,4 +1,4 @@
-import { ShelfID, UserID } from '@/core/ids/id';
+import { ShelfID, UserID } from '@/core/models/ids/id';
 
 
 export type ThemePreference =

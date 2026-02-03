@@ -1,8 +1,8 @@
 // core/drafts/submitDraft.ts
-import { StorageAdapter } from '@/storage/adapter';
-import { storageKeys } from '@/storage/keys';
+import { StorageAdapter } from '@/core/storage/adapter';
+import { storageKeys } from '@/core/storage/keys';
 import { Book } from '@/core/models/book';
-import { createId } from '@/core/ids/id';
+import { createId } from '@/core/models/ids/id';
 
 export async function submitBookDraft(
   adapter: StorageAdapter,

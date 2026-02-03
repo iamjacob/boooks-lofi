@@ -1,7 +1,7 @@
 import { User } from '@/core/models/user';
-import { UserID } from '@/core/ids/id';
+import { UserID } from '@/core/models/ids/id';
 import { userRepo } from '@/core/repo';
-import { createId } from '@/core/ids/id';
+import { createId } from '@/core/models/ids/id';
 
 export async function createUser(input: {
   handle: string;

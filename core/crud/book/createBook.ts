@@ -1,6 +1,6 @@
 import { Book } from '@/core/models/book';
 import { bookRepo } from '@/core/repo';
-import { createId } from './../../ids/id'
+import { createId } from '../../models/ids/id'
 
 export async function createBook(
   partial: Omit<Book, 'id' | 'createdAt' | 'updatedAt' | 'isSynced'>

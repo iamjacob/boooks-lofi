@@ -1,7 +1,7 @@
 "use client";
 
 import { BookListItem } from "@/ui/models/bookListItem";
-import { ID } from "@/core/ids/id";
+import { ID } from "@/core/models/ids/id";
 import { pickImageUri } from "@/ui/lib/pickImage";
 import { ResolvedImage } from "@/ui/components/images/ResolvedImage";
 

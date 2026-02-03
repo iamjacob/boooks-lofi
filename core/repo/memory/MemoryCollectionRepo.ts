@@ -1,5 +1,5 @@
 import { Collection } from '@/core/models/collection';
-import { CollectionID, ShelfID } from '@/core/ids/id';
+import { CollectionID, ShelfID } from '@/core/models/ids/id';
 
 export class MemoryCollectionRepo {
   private collections = new Map<CollectionID, Collection>();
